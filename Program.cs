@@ -8,14 +8,14 @@ var app = builder.Build();
 app.MapOpenApi("/openapi/v1.json");
 app.MapScalarApiReference(options =>
 {
- options.Title = "Aarhus Space Program API";
+    options.Title = "Aarhus Space Program API";
 });
 
 // Minimal example endpoint
 app.MapGet("/api/astronauts", () =>
 {
- return new[]
- {
+    return new[]
+    {
  new Astronaut(
  "Neil Legstrong",
  "Commander",
@@ -43,3 +43,37 @@ record Astronaut(
  string Paygrade,
  DateTime HireDate
 );
+
+public class LibraryContext : DbContext
+{
+    public LibraryContext(DbContextOptions options) : base(options) { }
+}
+
+public class Employee
+{
+    [key]
+    public int Employee_id { get; set; }
+    public string Name { get; set; }
+    public DateOnly Hire_date { get; set; }
+}
+public class Astronaut : Employee
+{
+    /*paygrade*/
+    public int Paygrade { get; set; }
+    /*rank*/
+    public string Rank { get; set; }
+    /*Experience*/
+    public int Hours_in_space { get; set; }
+    public int Hours_in_simulation { get; set; }
+}
+
+public class Scientist
+{
+    public string Title { get; set; }
+    public string Speciality { get; set; }
+}
+
+public class Manager
+{
+    public string Department { get; set; }
+}

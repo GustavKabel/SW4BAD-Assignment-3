@@ -32,3 +32,15 @@ C:\BackendDatabaser\AarhusSpaceProgram.Api\obj\Debug\net10.0\refint\AarhusSpaceP
 C:\BackendDatabaser\AarhusSpaceProgram.Api\obj\Debug\net10.0\AarhusSpaceProgram.Api.pdb
 C:\BackendDatabaser\AarhusSpaceProgram.Api\obj\Debug\net10.0\AarhusSpaceProgram.Api.genruntimeconfig.cache
 C:\BackendDatabaser\AarhusSpaceProgram.Api\obj\Debug\net10.0\ref\AarhusSpaceProgram.Api.dll
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.csproj.AssemblyReference.cache
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.AssemblyInfoInputs.cache
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.AssemblyInfo.cs
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.csproj.CoreCompileInputs.cache
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.MvcApplicationPartsAssemblyInfo.cs
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.sourcelink.json
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.dll
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\refint\AarhusSpaceProgram.Api.dll
+C:\BackendDatabaser\Assignment3\SW4BAD-Assignment-3\obj\Debug\net10.0\AarhusSpaceProgram.Api.pdb

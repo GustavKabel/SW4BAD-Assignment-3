@@ -44,9 +44,9 @@ record Astronaut(
  DateTime HireDate
 );
 
-public class LibraryContext : DbContext
+public class SpaceProgramContext : DbContext
 {
-    public LibraryContext(DbContextOptions options) : base(options) { }
+    public SpaceProgramContext(DbContextOptions options) : base(options) { }
 }
 
 public class Employee

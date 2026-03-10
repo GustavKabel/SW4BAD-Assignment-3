@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AarhusSpaceProgram.entities;
+namespace AarhusSpaceProgram.Api.entities;
 
-public class Manager
+public class Manager: Employee
 {
     [Required]
     [StringLength(100)]
-    [Column("Department", TypeName = "nvarchar(100)")]
+    [Column("department", TypeName = "nvarchar(100)")]
     public string? Department { get; set; }
 }

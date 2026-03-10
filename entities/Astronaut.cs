@@ -1,16 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AarhusSpaceProgram.entities;
+namespace AarhusSpaceProgram.Api.entities;
 
 public class Astronaut : Employee
 {
+    [Required]
     public int Paygrade { get; set; }
     [Required]
     [StringLength(50)]
-    [Column("Rank", TypeName = "nvarchar(50)")]
+    [Column("rank", TypeName = "nvarchar(50)")]
     public string? Rank { get; set; }    
-    public int Hours_in_space { get; set; }
-    public int Hours_in_simulation { get; set; }
+    public int HoursInSpace { get; set; }
+    public int HoursInSimulation { get; set; }
 
 }

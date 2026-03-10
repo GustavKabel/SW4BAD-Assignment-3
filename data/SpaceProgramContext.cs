@@ -1,8 +1,8 @@
-using AarhusSpaceProgram.entities;
+using AarhusSpaceProgram.Api.entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace AarhusSpaceProgram.data;
+namespace AarhusSpaceProgram.Api.data;
 
 
 

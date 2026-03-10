@@ -1,15 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AarhusSpaceProgram.entities;
+namespace AarhusSpaceProgram.Api.entities;
 
 public class Employee
 {
     [Key]
-    public int Employee_id { get; set; }
+    public int EmployeeId { get; set; }
     [Required]
     [StringLength(100)]
-    [Column("FullName", TypeName = "nvarchar(100)")]
+    [Column("name", TypeName = "nvarchar(100)")]
     public string? Name { get; set; }
-    public DateOnly Hire_date { get; set; }
+    public DateOnly HireDate { get; set; }
 }

@@ -2,9 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Scalar.AspNetCore;
 using System.ComponentModel.DataAnnotations;
-
-
-// stuff
+using AarhusSpaceProgram.data;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services
@@ -26,7 +24,6 @@ var sqlConnectionString = builder.Configuration.GetConnectionString("SqlServer")
 builder.Services.AddDbContext<SpaceProgramContext>(options =>
     options.UseSqlServer(sqlConnectionString));
 
-
 var app = builder.Build();
 // Enable OpenAPI + Scalar
 app.MapOpenApi("/openapi/v1.json");
@@ -35,8 +32,4 @@ app.MapScalarApiReference(options =>
     options.Title = "Aarhus Space Program API";
 });
 
-    public class SpaceProgramContext : DbContext
-    {
-        public SpaceProgramContext(DbContextOptions options) : base(options) { }
-    }
 

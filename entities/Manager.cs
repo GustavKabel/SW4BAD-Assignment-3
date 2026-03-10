@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AarhusSpaceProgram.Api.entities;
+namespace AarhusSpaceProgram.Api.Entities;
 
 public class Manager: Employee
 {

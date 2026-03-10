@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Scalar.AspNetCore;
 using System.ComponentModel.DataAnnotations;
-using AarhusSpaceProgram.Api.data;
+using AarhusSpaceProgram.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services

@@ -30,19 +30,30 @@ public class SpaceProgramContext : DbContext
         modelBuilder.Entity<Mission>()
         .HasMany(m => m.Astronauts)
         .WithMany(a => a.Missions)
-        .UsingEntity(j => j.ToTable("Mission_Astronaut")
-        .HasData(
-            new { AstronautsEmployeeId = 5, MissionsMissionId = 1 },
-            new { AstronautsEmployeeId = 6, MissionsMissionId = 1 },
-            new { AstronautsEmployeeId = 7, MissionsMissionId = 1 },
-            new { AstronautsEmployeeId = 6, MissionsMissionId = 2 },
-            new { AstronautsEmployeeId = 7, MissionsMissionId = 2 }
-        ));
+        .UsingEntity<Dictionary<string, object>>(
+            "Mission_Astronaut",
+            j => j.HasOne<Astronaut>().WithMany().HasForeignKey("AstronautsEmployeeId").OnDelete(DeleteBehavior.NoAction),
+            j => j.HasOne<Mission>().WithMany().HasForeignKey("MissionsMissionId").OnDelete(DeleteBehavior.NoAction),
+            j =>
+            {
+                j.HasData(
+                    new { AstronautsEmployeeId = 5, MissionsMissionId = 1 },
+                    new { AstronautsEmployeeId = 6, MissionsMissionId = 1 },
+                    new { AstronautsEmployeeId = 7, MissionsMissionId = 1 },
+                    new { AstronautsEmployeeId = 6, MissionsMissionId = 2 },
+                    new { AstronautsEmployeeId = 7, MissionsMissionId = 2 }
+                );
+            }
+        );
 
         modelBuilder.Entity<Mission>()
         .HasMany(m => m.Scientists)
         .WithMany(s => s.Missions)
-        .UsingEntity(j => j.ToTable("Mission_Scientist"));
+        .UsingEntity<Dictionary<string, object>>(
+        "Mission_Scientist",
+        j => j.HasOne<Scientist>().WithMany().HasForeignKey("ScientistsEmployeeId").OnDelete(DeleteBehavior.NoAction),
+        j => j.HasOne<Mission>().WithMany().HasForeignKey("MissionsMissionId").OnDelete(DeleteBehavior.NoAction)
+        );
 
         // 1-to-1 relation between Mission and Rocket
         modelBuilder.Entity<Mission>()

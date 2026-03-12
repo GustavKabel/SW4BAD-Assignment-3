@@ -1,5 +1,17 @@
 services:
   api:
-    image: randomguydk/imagetest:latest
+    image: randomguydk/aarhusspaceprogram:latest
+    build: .
     ports:
       - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__SqlServer=Data Source=db;Initial Catalog=AarhusSpaceProgram;User ID=sa;Password=QJN63mdy;Trust Server Certificate=True;  
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1434:1434"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=QJN63mdy

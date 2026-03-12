@@ -2,58 +2,108 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AarhusSpaceProgram.Api.Entities;
+
+public enum MissionStatus
+{
+    Created,
+    Budgeted,
+    Approved,
+    Planned,
+    Active,
+    Completed,
+    Aborted,
+    Failed
+}
+
+public enum TypeOfMission
+{
+    None,
+    Orbiting,
+    Landing
+}
+
 [Table("Mission")]
 public class Mission
 {
+    //Mission id
     [Key]
     [Column("mission_id")]
     public int MissionId { get; set; }
 
+    //name
     [Required]
     [StringLength(100, ErrorMessage = "Mission name cannot exceed 100 characters.")]
-    [Column("mission_id", TypeName = "varchar(100)")]
+    [Column("name", TypeName = "varchar(100)")]
     public string Name { get; set; } = string.Empty;
 
+    //Planned launch data
     [Column("planned_launch_date")]
     public DateOnly PlannedLaunchDate { get; set; }
 
+    //Planned duration
     [Column("planned_duration")]
     public int PlannedDuration { get; set; }
-    // we let status be a string as we use enums later
+
+    //Status
     [Required]
-    [StringLength(50, ErrorMessage = "Status cannot exceed 50 characters.")]
     [Column("status", TypeName = "varchar(50)")]
-    public string Status { get; set; } = string.Empty;
+    public MissionStatus Status { get; set; } = MissionStatus.Created;
+
+    public void UpdateStatus(MissionStatus newStatus)
+    {
+        // A mission cannot directly go from created to active
+        if (Status == MissionStatus.Created && newStatus == MissionStatus.Active)
+        {
+            throw new InvalidOperationException("A mission cannot move directly from created to active");
+        }
+        // A mission completed cannot become active again
+        if (Status == MissionStatus.Completed && newStatus == MissionStatus.Active)
+        {
+            throw new InvalidOperationException("A mission cannot move completed to active");
+        }
+        // Only active missions can move to Completed, failed or aborted
+        if (newStatus == MissionStatus.Completed || newStatus == MissionStatus.Failed || newStatus == MissionStatus.Aborted && Status != MissionStatus.Active)
+        {
+            throw new InvalidOperationException("Only active missions can move to completed, failed or aborted");
+        }
+    }
+
+    //Type of mission
     [Required]
-    [StringLength(50, ErrorMessage = "Type cannot exceed 50 characters.")]
+    //[StringLength(50, ErrorMessage = "Type cannot exceed 50 characters.")]
     [Column("type", TypeName = "varchar(50)")]
-    public string Type { get; set; } = string.Empty;
+    public TypeOfMission Type { get; set; } = TypeOfMission.None;
 
-    // Foerign Keys
+    // Foreign Keys
 
+    //Foreign key for manager id
     [Column("manager_id")]
     public int ManagerId { get; set; }
 
     [ForeignKey(nameof(ManagerId))]
     public Manager Manager { get; set; } = null!;
 
+    //Foreign key for rocket id
     [Column("rocket_id")]
     public int RocketId { get; set; }
-
+    /*
     [ForeignKey(nameof(RocketId))]
+    */
     public Rocket Rocket { get; set; } = null!;
 
+    //Foreign key for launchpad id
     [Column("launchpad_id")]
-    public int LaunchPadId { get; set;}
+    public int LaunchPadId { get; set; }
 
     [ForeignKey(nameof(LaunchPadId))]
-    public LaunchPad LaunchPad { get; set;} = null!;
-    
+    public LaunchPad LaunchPad { get; set; } = null!;
+
+    //Foreign key for target body id
     [Column("target_body_id")]
     public int TargetBodyId { get; set; }
     [ForeignKey(nameof(TargetBodyId))]
     public CelestialBody TargetBody { get; set; } = null!;
 
     public ICollection<Astronaut> Astronauts { get; set; } = new HashSet<Astronaut>();
-    public ICollection<Scientist> Scientists { get; set; } = new HashSet<Scientist>(); 
+    public ICollection<Scientist> Scientists { get; set; } = new HashSet<Scientist>();
 }

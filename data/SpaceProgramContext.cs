@@ -7,8 +7,8 @@ namespace AarhusSpaceProgram.Api.Data;
 
 public class SpaceProgramContext : DbContext
 {
-    public SpaceProgramContext(DbContextOptions options) : base(options) { }
-    public DbSet<Employee> Employees {get; set; } = null!;
+    public SpaceProgramContext(DbContextOptions<SpaceProgramContext> options) : base(options) { }
+    public DbSet<Employee> Employees { get; set; } = null!;
     public DbSet<Astronaut> Astronauts { get; set; } = null!;
     public DbSet<Scientist> Scientists { get; set; } = null!;
     public DbSet<Manager> Managers { get; set; } = null!;
@@ -25,7 +25,7 @@ public class SpaceProgramContext : DbContext
 
         // This is for inheritance for employees
         modelBuilder.Entity<Employee>().UseTptMappingStrategy();
-        
+
         // Now we make Fluent API for our many-to-many relations
         modelBuilder.Entity<Mission>()
         .HasMany(m => m.Astronauts)
@@ -36,7 +36,7 @@ public class SpaceProgramContext : DbContext
         .HasMany(m => m.Scientists)
         .WithMany(s => s.Missions)
         .UsingEntity(j => j.ToTable("Mission_Scientist"));
-            
+
         // 1-to-1 relation between Mission and Rocket
         modelBuilder.Entity<Mission>()
         .HasOne(m => m.Rocket)
@@ -52,7 +52,8 @@ public class SpaceProgramContext : DbContext
         modelBuilder.Entity<Mission>()
         .HasIndex(m => new { m.LaunchPadId, m.PlannedLaunchDate })
         .IsUnique();
-        
+
+
     }
 }
 

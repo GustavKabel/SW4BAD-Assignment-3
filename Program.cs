@@ -12,7 +12,7 @@ builder.Services.AddOpenApi();
 var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
-    .WriteTo.MongoDBBson(cfg => 
+    .WriteTo.MongoDBBson(cfg =>
     {
         cfg.SetMongoUrl(mongoConnectionString);
     })

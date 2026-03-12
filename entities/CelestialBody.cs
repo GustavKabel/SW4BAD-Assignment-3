@@ -2,12 +2,28 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AarhusSpaceProgram.Api.Entities;
+
+
+public enum CelestialBodyType
+{
+    None,
+    Planet,
+    Moon
+}
+
+public enum CelestialBodySubType
+{
+    None,
+    RockyPlanet,
+    GasGiant
+}
+
 [Table("CelestialBody")]
 public class CelestialBody
 {
     [Key]
     [Column("body_id")]
-    public int BodyId { get; set;}
+    public int BodyId { get; set; }
 
     [Required]
     [StringLength(100, ErrorMessage = "Name cannot exeec 100 characters.")]
@@ -18,14 +34,12 @@ public class CelestialBody
     public int Distance { get; set; }
 
     [Required]
-    [StringLength(50, ErrorMessage = "Body type cannot exceed 50 characters.")]
     [Column("body_type", TypeName = "nvarchar(50)")]
-    public string? BodyType { get; set;}
+    public CelestialBodyType BodyType { get; set; } = CelestialBodyType.None;
 
     [Required]
-    [StringLength(50, ErrorMessage = "Subtype cannot exceed 50 characters.")]
     [Column("subtype", TypeName = "nvarchar(50)")]
-    public string? Subtype { get; set; }
+    public CelestialBodySubType Subtype { get; set; } = CelestialBodySubType.None;
 
     [Column("parent_body_id")]
     public int? ParentBodyId { get; set; }

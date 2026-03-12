@@ -30,7 +30,14 @@ public class SpaceProgramContext : DbContext
         modelBuilder.Entity<Mission>()
         .HasMany(m => m.Astronauts)
         .WithMany(a => a.Missions)
-        .UsingEntity(j => j.ToTable("Mission_Astronaut"));
+        .UsingEntity(j => j.ToTable("Mission_Astronaut")
+        .HasData(
+            new { AstronautsEmployeeId = 5, MissionsMissionId = 1 },
+            new { AstronautsEmployeeId = 6, MissionsMissionId = 1 },
+            new { AstronautsEmployeeId = 7, MissionsMissionId = 1 },
+            new { AstronautsEmployeeId = 6, MissionsMissionId = 2 },
+            new { AstronautsEmployeeId = 7, MissionsMissionId = 2 }
+        ));
 
         modelBuilder.Entity<Mission>()
         .HasMany(m => m.Scientists)
@@ -99,15 +106,6 @@ public class SpaceProgramContext : DbContext
             new Mission { MissionId = 2, Name = "Artemis I", PlannedLaunchDate = new DateOnly(2025, 11, 16), PlannedDuration = 25, Status = MissionStatus.Active, Type = TypeOfMission.Orbiting, ManagerId = 2, RocketId = 2, LaunchPadId = 2, TargetBodyId = 2 }
         );
 
-        // Seeding the Many-to-Many Join Tables
-        // EF Core creates invisible shadow properties for join tables based on the class names
-        modelBuilder.Entity("Mission_Astronaut").HasData(
-            new { AstronautsEmployeeId = 5, MissionsMissionId = 1 },
-            new { AstronautsEmployeeId = 6, MissionsMissionId = 1 },
-            new { AstronautsEmployeeId = 7, MissionsMissionId = 1 },
-            new { AstronautsEmployeeId = 6, MissionsMissionId = 2 },
-            new { AstronautsEmployeeId = 7, MissionsMissionId = 2 }
-        );
     }
 }
 

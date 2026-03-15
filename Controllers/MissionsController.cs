@@ -33,10 +33,10 @@ public class MissionsController : ControllerBase
             Status = m.Status.ToString(),
             Type = m.Type.ToString(),
 
-            ManagerName = m.Manager != null ? m.Manager.Name : "No Manager",
-            RocketModel = m.Rocket != null ? m.Rocket.ModelName : "No Rocket",
-            LaunchPadLocation = m.LaunchPad != null ? m.LaunchPad.Location : "No Launchpad",
-            TargetBodyName = m.TargetBody != null ? m.TargetBody.Name : "No Target",
+            ManagerName = m.Manager.Name ?? "No Manager",
+            RocketModel = m.Rocket.ModelName ?? "No Rocket",
+            LaunchPadLocation = m.LaunchPad.Location ?? "No Launchpad",
+            TargetBodyName = m.TargetBody.Name ?? "No Target",
 
             Crew = m.Astronauts.Select(a => new AstronautDto
             {
@@ -74,8 +74,8 @@ public class MissionsController : ControllerBase
             
             ManagerName = mission.Manager != null ? mission.Manager.Name : "No Manager",
             RocketModel = mission.Rocket != null ? mission.Rocket.ModelName : "No Rocket",
-            LaunchPadLocation = mission.LaunchPad != null ? mission.LaunchPad.Location : "No Launchpad",
-            TargetBodyName = mission.TargetBody != null ? mission.TargetBody.Name : "No Target",
+            LaunchPadLocation = mission.LaunchPad.Location ?? "No Launchpad",
+            TargetBodyName = mission.TargetBody.Name ?? "No Target",
             
             Crew = mission.Astronauts.Select(a => new AstronautDto
             {

@@ -13,6 +13,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<IScientistRepository, ScientistRepository>();
+builder.Services.AddScoped<IAstronautRepository, AstronautRepository>();
 
 var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 Log.Logger = new LoggerConfiguration()

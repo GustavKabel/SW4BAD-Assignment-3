@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AarhusSpaceProgram.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class _0001InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -323,6 +323,16 @@ namespace AarhusSpaceProgram.Api.Migrations
                     { 6, 2 },
                     { 7, 1 },
                     { 7, 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Mission_Scientist",
+                columns: new[] { "MissionId", "ScientistEmployeeId" },
+                values: new object[,]
+                {
+                    { 1, 3 },
+                    { 1, 4 },
+                    { 2, 3 }
                 });
 
             migrationBuilder.CreateIndex(

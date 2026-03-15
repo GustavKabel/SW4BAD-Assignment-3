@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AarhusSpaceProgram.Api.Migrations
 {
     [DbContext(typeof(SpaceProgramContext))]
-    [Migration("20260315123035_SeedScientistsToMissions")]
-    partial class SeedScientistsToMissions
+    [Migration("20260315125704_0001-InitialCreate")]
+    partial class _0001InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

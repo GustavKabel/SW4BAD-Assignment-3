@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AarhusSpaceProgram.Api.Data;
 using AarhusSpaceProgram.Api.DTOs;
+using AarhusSpaceProgram.Api.Repositories;
 
 namespace AarhusSpaceProgram.Api.Controllers;
 
@@ -9,23 +10,21 @@ namespace AarhusSpaceProgram.Api.Controllers;
 [Route("api/[controller]")]
 public class MissionsController : ControllerBase
 {
-    private readonly SpaceProgramContext _context;
+    // private readonly SpaceProgramContext _context;
+    private readonly IMissionRepository _repository;
 
-    public MissionsController(SpaceProgramContext context)
+    public MissionsController(IMissionRepository repository)
     {
-        _context = context;
+        _repository = repository;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MissionDto>>> GetMissions()
     {
-    return await _context.Missions
-        .Include(m => m.Manager)
-        .Include(m => m.Rocket)
-        .Include(m => m.LaunchPad)
-        .Include(m => m.TargetBody)
-        .Include(m => m.Astronauts)
-        .Select(m => new MissionDto
+
+        var missions = await _repository.GetAllMissionsAsync();
+
+        var missionDtos = missions.Select(m => new MissionDto
         {
             MissionId = m.MissionId,
             Name = m.Name,
@@ -33,12 +32,12 @@ public class MissionsController : ControllerBase
             PlannedDuration = m.PlannedDuration,
             Status = m.Status.ToString(),
             Type = m.Type.ToString(),
-            
-            ManagerName = m.Manager.Name != null ? m.Manager.Name : "No Manager",
-            RocketModel = m.Rocket.ModelName != null ? m.Rocket.ModelName : "No Rocket",
-            LaunchPadLocation = m.LaunchPad.Location != null ? m.LaunchPad.Location : "No Launchpad",
-            TargetBodyName = m.TargetBody.Name != null ? m.TargetBody.Name : "No Target",
-            
+
+            ManagerName = m.Manager != null ? m.Manager.Name : "No Manager",
+            RocketModel = m.Rocket != null ? m.Rocket.ModelName : "No Rocket",
+            LaunchPadLocation = m.LaunchPad != null ? m.LaunchPad.Location : "No Launchpad",
+            TargetBodyName = m.TargetBody != null ? m.TargetBody.Name : "No Target",
+
             Crew = m.Astronauts.Select(a => new AstronautDto
             {
                 EmployeeId = a.EmployeeId,
@@ -48,7 +47,8 @@ public class MissionsController : ControllerBase
                 HoursInSpace = a.HoursInSpace,
                 HoursInSimulation = a.HoursInSimulation
             }).ToList()
-        })
-        .ToListAsync();
+        }).ToList();
+
+        return Ok(missionDtos);
     }
 }

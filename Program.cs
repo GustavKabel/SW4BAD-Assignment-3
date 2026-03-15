@@ -3,6 +3,7 @@ using Serilog;
 using Scalar.AspNetCore;
 using System.ComponentModel.DataAnnotations;
 using AarhusSpaceProgram.Api.Data;
+using AarhusSpaceProgram.Api.Repositories;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+builder.Services.AddScoped<IMissionRepository, MissionRepository>();
+builder.Services.AddScoped<IScientistRepository, ScientistRepository>();
 
 var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 Log.Logger = new LoggerConfiguration()

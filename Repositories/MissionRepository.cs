@@ -1,0 +1,26 @@
+using AarhusSpaceProgram.Api.Data;
+using AarhusSpaceProgram.Api.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace AarhusSpaceProgram.Api.Repositories;
+
+public class MissionRepository : IMissionRepository
+{
+    private readonly SpaceProgramContext _context;
+
+    public MissionRepository(SpaceProgramContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<IEnumerable<Mission>> GetAllMissionsAsync()
+    {
+        return await _context.Missions
+            .Include(m => m.Manager)
+            .Include(m => m.Rocket)
+            .Include(m => m.LaunchPad)
+            .Include(m => m.TargetBody)
+            .Include(m => m.Astronauts)
+            .ToListAsync();
+    }
+}

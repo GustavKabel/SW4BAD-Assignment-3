@@ -51,4 +51,51 @@ public class MissionsController : ControllerBase
 
         return Ok(missionDtos);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<MissionDetailsDto>> GetMissionById(int id)
+    {
+        
+        var mission = await _repository.GetMissionByIdAsync(id);
+
+        if (mission == null)
+        {
+            return NotFound($"Mission with ID {id} was not found.");
+        }
+
+        var missionDetailsDto = new MissionDetailsDto
+        {
+            MissionId = mission.MissionId,
+            Name = mission.Name,
+            PlannedLaunchDate = mission.PlannedLaunchDate,
+            PlannedDuration = mission.PlannedDuration,
+            Status = mission.Status.ToString(),
+            Type = mission.Type.ToString(),
+            
+            ManagerName = mission.Manager != null ? mission.Manager.Name : "No Manager",
+            RocketModel = mission.Rocket != null ? mission.Rocket.ModelName : "No Rocket",
+            LaunchPadLocation = mission.LaunchPad != null ? mission.LaunchPad.Location : "No Launchpad",
+            TargetBodyName = mission.TargetBody != null ? mission.TargetBody.Name : "No Target",
+            
+            Crew = mission.Astronauts.Select(a => new AstronautDto
+            {
+                EmployeeId = a.EmployeeId,
+                Name = a.Name,
+                Rank = a.Rank,
+                Paygrade = a.Paygrade,
+                HoursInSpace = a.HoursInSpace,
+                HoursInSimulation = a.HoursInSimulation
+            }).ToList(),
+
+            Scientists = mission.Scientists.Select(s => new ScientistDto
+            {
+                EmployeeId = s.EmployeeId,
+                Name = s.Name,
+                Title = s.Title,
+                Speciality = s.Speciality
+            }).ToList()
+        };
+
+        return Ok(missionDetailsDto);
+    }
 }

@@ -50,10 +50,18 @@ public class SpaceProgramContext : DbContext
         .HasMany(m => m.Scientists)
         .WithMany(s => s.Missions)
         .UsingEntity<Dictionary<string, object>>(
-        "Mission_Scientist",
-        j => j.HasOne<Scientist>().WithMany().HasForeignKey("ScientistEmployeeId").OnDelete(DeleteBehavior.NoAction),
-        j => j.HasOne<Mission>().WithMany().HasForeignKey("MissionId").OnDelete(DeleteBehavior.NoAction)
-        );
+            "Mission_Scientist",
+            j => j.HasOne<Scientist>().WithMany().HasForeignKey("ScientistEmployeeId").OnDelete(DeleteBehavior.NoAction),
+            j => j.HasOne<Mission>().WithMany().HasForeignKey("MissionId").OnDelete(DeleteBehavior.NoAction),
+            j =>
+                {
+                    j.HasData(
+                        new { ScientistEmployeeId = 3, MissionId = 1},
+                        new { ScientistEmployeeId = 4, MissionId = 1},
+                        new { ScientistEmployeeId = 3, MissionId = 2}
+                    );
+                }
+            );
 
         // 1-to-1 relation between Mission and Rocket
         modelBuilder.Entity<Mission>()

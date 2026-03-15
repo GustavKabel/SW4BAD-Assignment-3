@@ -23,4 +23,16 @@ public class MissionRepository : IMissionRepository
             .Include(m => m.Astronauts)
             .ToListAsync();
     }
+
+    public async Task<Mission?> GetMissionByIdAsync(int id)
+    {
+        return await _context.Missions
+            .Include(m => m.Manager)
+            .Include(m => m.Rocket)
+            .Include(m => m.LaunchPad)
+            .Include(m => m.TargetBody)
+            .Include(m => m.Astronauts)
+            .Include(m => m.Scientists)
+            .FirstOrDefaultAsync(m => m.MissionId == id);
+    }
 }

@@ -20,7 +20,7 @@ public class LaunchPad
     public string Status { get; set;} = string.Empty;
 
     [Column("max_supported_weight")]
-    public int MaxWeight { get; set; }
+    public double MaxWeight { get; set; }
 
     public ICollection<Mission> Missions { get; set; } = new HashSet<Mission>();
 }

@@ -62,7 +62,7 @@ public class Mission
             throw new InvalidOperationException("A mission cannot move completed to active");
         }
         // Only active missions can move to Completed, failed or aborted
-        if (newStatus == MissionStatus.Completed || newStatus == MissionStatus.Failed || newStatus == MissionStatus.Aborted && Status != MissionStatus.Active)
+        if ((newStatus == MissionStatus.Completed || newStatus == MissionStatus.Failed || newStatus == MissionStatus.Aborted) && Status != MissionStatus.Active)
         {
             throw new InvalidOperationException("Only active missions can move to completed, failed or aborted");
         }

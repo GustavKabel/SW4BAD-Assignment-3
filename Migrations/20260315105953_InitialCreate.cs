@@ -57,7 +57,7 @@ namespace AarhusSpaceProgram.Api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    max_supported_weight = table.Column<int>(type: "int", nullable: false)
+                    max_supported_weight = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,20 +190,20 @@ namespace AarhusSpaceProgram.Api.Migrations
                 name: "Mission_Astronaut",
                 columns: table => new
                 {
-                    AstronautsEmployeeId = table.Column<int>(type: "int", nullable: false),
-                    MissionsMissionId = table.Column<int>(type: "int", nullable: false)
+                    AstronautEmployeeId = table.Column<int>(type: "int", nullable: false),
+                    MissionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Mission_Astronaut", x => new { x.AstronautsEmployeeId, x.MissionsMissionId });
+                    table.PrimaryKey("PK_Mission_Astronaut", x => new { x.AstronautEmployeeId, x.MissionId });
                     table.ForeignKey(
-                        name: "FK_Mission_Astronaut_Astronaut_AstronautsEmployeeId",
-                        column: x => x.AstronautsEmployeeId,
+                        name: "FK_Mission_Astronaut_Astronaut_AstronautEmployeeId",
+                        column: x => x.AstronautEmployeeId,
                         principalTable: "Astronaut",
                         principalColumn: "employee_id");
                     table.ForeignKey(
-                        name: "FK_Mission_Astronaut_Mission_MissionsMissionId",
-                        column: x => x.MissionsMissionId,
+                        name: "FK_Mission_Astronaut_Mission_MissionId",
+                        column: x => x.MissionId,
                         principalTable: "Mission",
                         principalColumn: "mission_id");
                 });
@@ -212,20 +212,20 @@ namespace AarhusSpaceProgram.Api.Migrations
                 name: "Mission_Scientist",
                 columns: table => new
                 {
-                    MissionsMissionId = table.Column<int>(type: "int", nullable: false),
-                    ScientistsEmployeeId = table.Column<int>(type: "int", nullable: false)
+                    MissionId = table.Column<int>(type: "int", nullable: false),
+                    ScientistEmployeeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Mission_Scientist", x => new { x.MissionsMissionId, x.ScientistsEmployeeId });
+                    table.PrimaryKey("PK_Mission_Scientist", x => new { x.MissionId, x.ScientistEmployeeId });
                     table.ForeignKey(
-                        name: "FK_Mission_Scientist_Mission_MissionsMissionId",
-                        column: x => x.MissionsMissionId,
+                        name: "FK_Mission_Scientist_Mission_MissionId",
+                        column: x => x.MissionId,
                         principalTable: "Mission",
                         principalColumn: "mission_id");
                     table.ForeignKey(
-                        name: "FK_Mission_Scientist_Scientist_ScientistsEmployeeId",
-                        column: x => x.ScientistsEmployeeId,
+                        name: "FK_Mission_Scientist_Scientist_ScientistEmployeeId",
+                        column: x => x.ScientistEmployeeId,
                         principalTable: "Scientist",
                         principalColumn: "employee_id");
                 });
@@ -258,8 +258,8 @@ namespace AarhusSpaceProgram.Api.Migrations
                 columns: new[] { "launchpad_id", "location", "max_supported_weight", "status" },
                 values: new object[,]
                 {
-                    { 1, "Hogwartz", 3000000, "Active" },
-                    { 2, "The forbidden forest", 4000000, "Active" }
+                    { 1, "Hogwartz", 3000000.0, "Active" },
+                    { 2, "The forbidden forest", 4000000.0, "Active" }
                 });
 
             migrationBuilder.InsertData(
@@ -315,7 +315,7 @@ namespace AarhusSpaceProgram.Api.Migrations
 
             migrationBuilder.InsertData(
                 table: "Mission_Astronaut",
-                columns: new[] { "AstronautsEmployeeId", "MissionsMissionId" },
+                columns: new[] { "AstronautEmployeeId", "MissionId" },
                 values: new object[,]
                 {
                     { 5, 1 },
@@ -353,14 +353,14 @@ namespace AarhusSpaceProgram.Api.Migrations
                 column: "target_body_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mission_Astronaut_MissionsMissionId",
+                name: "IX_Mission_Astronaut_MissionId",
                 table: "Mission_Astronaut",
-                column: "MissionsMissionId");
+                column: "MissionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mission_Scientist_ScientistsEmployeeId",
+                name: "IX_Mission_Scientist_ScientistEmployeeId",
                 table: "Mission_Scientist",
-                column: "ScientistsEmployeeId");
+                column: "ScientistEmployeeId");
         }
 
         /// <inheritdoc />

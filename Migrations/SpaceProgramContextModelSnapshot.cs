@@ -130,8 +130,8 @@ namespace AarhusSpaceProgram.Api.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("location");
 
-                    b.Property<int>("MaxWeight")
-                        .HasColumnType("int")
+                    b.Property<double>("MaxWeight")
+                        .HasColumnType("float")
                         .HasColumnName("max_supported_weight");
 
                     b.Property<string>("Status")
@@ -149,14 +149,14 @@ namespace AarhusSpaceProgram.Api.Migrations
                         {
                             LaunchPadId = 1,
                             Location = "Hogwartz",
-                            MaxWeight = 3000000,
+                            MaxWeight = 3000000.0,
                             Status = "Active"
                         },
                         new
                         {
                             LaunchPadId = 2,
                             Location = "The forbidden forest",
-                            MaxWeight = 4000000,
+                            MaxWeight = 4000000.0,
                             Status = "Active"
                         });
                 });
@@ -320,57 +320,57 @@ namespace AarhusSpaceProgram.Api.Migrations
 
             modelBuilder.Entity("Mission_Astronaut", b =>
                 {
-                    b.Property<int>("AstronautsEmployeeId")
+                    b.Property<int>("AstronautEmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MissionsMissionId")
+                    b.Property<int>("MissionId")
                         .HasColumnType("int");
 
-                    b.HasKey("AstronautsEmployeeId", "MissionsMissionId");
+                    b.HasKey("AstronautEmployeeId", "MissionId");
 
-                    b.HasIndex("MissionsMissionId");
+                    b.HasIndex("MissionId");
 
                     b.ToTable("Mission_Astronaut");
 
                     b.HasData(
                         new
                         {
-                            AstronautsEmployeeId = 5,
-                            MissionsMissionId = 1
+                            AstronautEmployeeId = 5,
+                            MissionId = 1
                         },
                         new
                         {
-                            AstronautsEmployeeId = 6,
-                            MissionsMissionId = 1
+                            AstronautEmployeeId = 6,
+                            MissionId = 1
                         },
                         new
                         {
-                            AstronautsEmployeeId = 7,
-                            MissionsMissionId = 1
+                            AstronautEmployeeId = 7,
+                            MissionId = 1
                         },
                         new
                         {
-                            AstronautsEmployeeId = 6,
-                            MissionsMissionId = 2
+                            AstronautEmployeeId = 6,
+                            MissionId = 2
                         },
                         new
                         {
-                            AstronautsEmployeeId = 7,
-                            MissionsMissionId = 2
+                            AstronautEmployeeId = 7,
+                            MissionId = 2
                         });
                 });
 
             modelBuilder.Entity("Mission_Scientist", b =>
                 {
-                    b.Property<int>("MissionsMissionId")
+                    b.Property<int>("MissionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ScientistsEmployeeId")
+                    b.Property<int>("ScientistEmployeeId")
                         .HasColumnType("int");
 
-                    b.HasKey("MissionsMissionId", "ScientistsEmployeeId");
+                    b.HasKey("MissionId", "ScientistEmployeeId");
 
-                    b.HasIndex("ScientistsEmployeeId");
+                    b.HasIndex("ScientistEmployeeId");
 
                     b.ToTable("Mission_Scientist");
                 });
@@ -548,13 +548,13 @@ namespace AarhusSpaceProgram.Api.Migrations
                 {
                     b.HasOne("AarhusSpaceProgram.Api.Entities.Astronaut", null)
                         .WithMany()
-                        .HasForeignKey("AstronautsEmployeeId")
+                        .HasForeignKey("AstronautEmployeeId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("AarhusSpaceProgram.Api.Entities.Mission", null)
                         .WithMany()
-                        .HasForeignKey("MissionsMissionId")
+                        .HasForeignKey("MissionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
@@ -563,13 +563,13 @@ namespace AarhusSpaceProgram.Api.Migrations
                 {
                     b.HasOne("AarhusSpaceProgram.Api.Entities.Mission", null)
                         .WithMany()
-                        .HasForeignKey("MissionsMissionId")
+                        .HasForeignKey("MissionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("AarhusSpaceProgram.Api.Entities.Scientist", null)
                         .WithMany()
-                        .HasForeignKey("ScientistsEmployeeId")
+                        .HasForeignKey("ScientistEmployeeId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });

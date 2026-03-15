@@ -32,16 +32,16 @@ public class SpaceProgramContext : DbContext
         .WithMany(a => a.Missions)
         .UsingEntity<Dictionary<string, object>>(
             "Mission_Astronaut",
-            j => j.HasOne<Astronaut>().WithMany().HasForeignKey("AstronautsEmployeeId").OnDelete(DeleteBehavior.NoAction),
-            j => j.HasOne<Mission>().WithMany().HasForeignKey("MissionsMissionId").OnDelete(DeleteBehavior.NoAction),
+            j => j.HasOne<Astronaut>().WithMany().HasForeignKey("AstronautEmployeeId").OnDelete(DeleteBehavior.NoAction),
+            j => j.HasOne<Mission>().WithMany().HasForeignKey("MissionId").OnDelete(DeleteBehavior.NoAction),
             j =>
             {
                 j.HasData(
-                    new { AstronautsEmployeeId = 5, MissionsMissionId = 1 },
-                    new { AstronautsEmployeeId = 6, MissionsMissionId = 1 },
-                    new { AstronautsEmployeeId = 7, MissionsMissionId = 1 },
-                    new { AstronautsEmployeeId = 6, MissionsMissionId = 2 },
-                    new { AstronautsEmployeeId = 7, MissionsMissionId = 2 }
+                    new { AstronautEmployeeId = 5, MissionId = 1 },
+                    new { AstronautEmployeeId = 6, MissionId = 1 },
+                    new { AstronautEmployeeId = 7, MissionId = 1 },
+                    new { AstronautEmployeeId = 6, MissionId = 2 },
+                    new { AstronautEmployeeId = 7, MissionId = 2 }
                 );
             }
         );
@@ -51,8 +51,8 @@ public class SpaceProgramContext : DbContext
         .WithMany(s => s.Missions)
         .UsingEntity<Dictionary<string, object>>(
         "Mission_Scientist",
-        j => j.HasOne<Scientist>().WithMany().HasForeignKey("ScientistsEmployeeId").OnDelete(DeleteBehavior.NoAction),
-        j => j.HasOne<Mission>().WithMany().HasForeignKey("MissionsMissionId").OnDelete(DeleteBehavior.NoAction)
+        j => j.HasOne<Scientist>().WithMany().HasForeignKey("ScientistEmployeeId").OnDelete(DeleteBehavior.NoAction),
+        j => j.HasOne<Mission>().WithMany().HasForeignKey("MissionId").OnDelete(DeleteBehavior.NoAction)
         );
 
         // 1-to-1 relation between Mission and Rocket
@@ -94,14 +94,14 @@ public class SpaceProgramContext : DbContext
 
         //Rockets
         modelBuilder.Entity<Rocket>().HasData(
-            new Rocket { RocketId = 1, ModelName = "Superfly", PayloadCap = 14000, CrewCap = 3, NoOfStages = 3, FuelCap = 200000, Weight = 296000 },
-            new Rocket { RocketId = 2, ModelName = "BC Rocket", PayloadCap = 13000, CrewCap = 2, NoOfStages = 2, FuelCap = 150000, Weight = 230000 }
+            new Rocket { RocketId = 1, ModelName = "Superfly", PayloadCap = 14000, CrewCap = 3, NoOfStages = 3, FuelCap = 200000, Weight = 296000.0 },
+            new Rocket { RocketId = 2, ModelName = "BC Rocket", PayloadCap = 13000, CrewCap = 2, NoOfStages = 2, FuelCap = 150000, Weight = 230000.0 }
         );
 
         //LaunchPads
         modelBuilder.Entity<LaunchPad>().HasData(
-            new LaunchPad { LaunchPadId = 1, Location = "Hogwartz", Status = "Active", MaxWeight = 3000000 },
-            new LaunchPad { LaunchPadId = 2, Location = "The forbidden forest", Status = "Active", MaxWeight = 4000000 }
+            new LaunchPad { LaunchPadId = 1, Location = "Hogwartz", Status = "Active", MaxWeight = 3000000.0 },
+            new LaunchPad { LaunchPadId = 2, Location = "The forbidden forest", Status = "Active", MaxWeight = 4000000.0 }
         );
 
         //Celestial Bodies

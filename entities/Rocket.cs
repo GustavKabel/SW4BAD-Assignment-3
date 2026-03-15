@@ -13,7 +13,6 @@ public class Rocket
     [Column("model_name", TypeName = "nvarchar(100)")]
     public string ModelName { get; set; } = string.Empty;
 
-    // Weight cannot be negative, which we will enforce in the DbContext
     [Column("payload_cap")]
     public int PayloadCap { get; set; }
 

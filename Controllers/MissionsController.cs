@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AarhusSpaceProgram.Api.Data;
 using AarhusSpaceProgram.Api.DTOs;
 using AarhusSpaceProgram.Api.Repositories;
 

@@ -12,7 +12,6 @@ public class MissionRepository : IMissionRepository
     {
         _context = context;
     }
-
     public async Task<IEnumerable<Mission>> GetAllMissionsAsync()
     {
         return await _context.Missions
@@ -23,7 +22,6 @@ public class MissionRepository : IMissionRepository
             .Include(m => m.Astronauts)
             .ToListAsync();
     }
-
     public async Task<Mission?> GetMissionByIdAsync(int id)
     {
         return await _context.Missions
@@ -33,6 +31,7 @@ public class MissionRepository : IMissionRepository
             .Include(m => m.TargetBody)
             .Include(m => m.Astronauts)
             .Include(m => m.Scientists)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(m => m.MissionId == id);
     }
     public async Task<IEnumerable<Mission>> GetMissionsByTargetBodyAsync(string targetBodyName)

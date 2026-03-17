@@ -61,4 +61,53 @@ public class AstronautsController : ControllerBase
         return Created($"/api/Astronauts/{returnDto.EmployeeId}", returnDto);
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<AstronautDto>> GetAstronautById(int id)
+    {
+        var astronaut = await _repository.GetAstronautByIdAsync(id);
+
+        if (astronaut == null)
+            return NotFound($"Astronaut with ID {id} was not found.");
+
+        return Ok(new AstronautDto
+        {
+            EmployeeId = astronaut.EmployeeId,
+            Name = astronaut.Name,
+            Rank = astronaut.Rank,
+            Paygrade = astronaut.Paygrade,
+            HoursInSpace = astronaut.HoursInSpace,
+            HoursInSimulation = astronaut.HoursInSimulation
+        });
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateAstronaut(int id, UpdateAstronautDto dto)
+    {
+        var existingAstronaut = await _repository.GetAstronautByIdAsync(id);
+        if (existingAstronaut == null)
+        {
+            return NotFound($"Astronaut with ID {id} was not found.");
+        }
+
+        existingAstronaut.Name = dto.Name;
+        existingAstronaut.Rank = dto.Rank;
+        existingAstronaut.Paygrade = dto.Paygrade;
+        existingAstronaut.HoursInSpace = dto.HoursInSpace;
+        existingAstronaut.HoursInSimulation = dto.HoursInSimulation;
+
+        await _repository.UpdateAstronautAsync(existingAstronaut);
+
+        return NoContent();
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAstronaut(int id)
+    {
+        var existingAstronaut = await _repository.GetAstronautByIdAsync(id);
+        if (existingAstronaut == null)
+        {
+            return NotFound($"Astronaut with id {id} was not found");
+        }
+        await _repository.DeleteAstronautAsync(id);
+        return NoContent();
+    }
 }

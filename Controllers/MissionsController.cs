@@ -8,7 +8,6 @@ namespace AarhusSpaceProgram.Api.Controllers;
 [Route("api/[controller]")]
 public class MissionsController : ControllerBase
 {
-    // private readonly SpaceProgramContext _context;
     private readonly IMissionRepository _repository;
 
     public MissionsController(IMissionRepository repository)

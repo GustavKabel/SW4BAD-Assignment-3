@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AarhusSpaceProgram.Api.DTOs;
 using AarhusSpaceProgram.Api.Repositories;
+using AarhusSpaceProgram.Api.Entities;
 
 namespace AarhusSpaceProgram.Api.Controllers;
 
@@ -32,4 +33,32 @@ public class AstronautsController : ControllerBase
 
         return Ok(astronautDtos);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<AstronautDto>> CreateAstronaut(CreateAstronautDto dto)
+    {
+        var astronaut = new Astronaut
+        {
+            Name = dto.Name,
+            Rank = dto.Rank,
+            Paygrade = dto.Paygrade,
+            HoursInSpace = dto.HoursInSpace,
+            HoursInSimulation = dto.HoursInSimulation
+        };
+
+        var createdAstronaut = await _repository.CreateAstronautAsync(astronaut);
+
+        var returnDto = new AstronautDto
+        {
+            EmployeeId = createdAstronaut.EmployeeId,
+            Name = createdAstronaut.Name,
+            Rank = createdAstronaut.Rank,
+            Paygrade = createdAstronaut.Paygrade,
+            HoursInSpace = createdAstronaut.HoursInSpace,
+            HoursInSimulation = createdAstronaut.HoursInSimulation
+        };
+
+        return Created($"/api/Astronauts/{returnDto.EmployeeId}", returnDto);
+    }
+
 }

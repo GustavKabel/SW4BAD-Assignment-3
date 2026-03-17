@@ -20,4 +20,13 @@ public class AstronautRepository : IAstronautRepository
             .OrderByDescending(a => a.HoursInSpace)
             .ToListAsync();
     }
+
+    public async Task<Astronaut> CreateAstronautAsync(Astronaut astronaut)
+    {
+        _context.Astronauts.Add(astronaut);
+        
+        await _context.SaveChangesAsync();
+        
+        return astronaut;
+    }
 }

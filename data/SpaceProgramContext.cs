@@ -121,7 +121,7 @@ public class SpaceProgramContext : DbContext
 
         //Missions
         modelBuilder.Entity<Mission>().HasData(
-            new Mission { MissionId = 1, Name = "Apollo 11", PlannedLaunchDate = new DateOnly(2010, 7, 16), PlannedDuration = 8, Status = MissionStatus.Completed, Type = TypeOfMission.Landing, ManagerId = 1, RocketId = 1, LaunchPadId = 1, TargetBodyId = 2 },
+            new Mission { MissionId = 1, Name = "Apollo 11", PlannedLaunchDate = new DateOnly(2010, 7, 16), PlannedDuration = 8, Status = MissionStatus.Completed, Type = TypeOfMission.Landing, ManagerId = 1, RocketId = 1, LaunchPadId = 1, TargetBodyId = 1 },
             new Mission { MissionId = 2, Name = "Artemis I", PlannedLaunchDate = new DateOnly(2025, 11, 16), PlannedDuration = 25, Status = MissionStatus.Active, Type = TypeOfMission.Orbiting, ManagerId = 2, RocketId = 2, LaunchPadId = 2, TargetBodyId = 2 }
         );
 

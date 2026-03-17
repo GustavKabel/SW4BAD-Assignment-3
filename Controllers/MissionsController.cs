@@ -98,4 +98,42 @@ public class MissionsController : ControllerBase
 
         return Ok(missionDetailsDto);
     }
+
+    [HttpGet("target/{bodyName}")]
+    public async Task<ActionResult<IEnumerable<MissionDto>>> GetMissionsByTargetBody(string bodyName)
+    {
+        var missions = await _repository.GetMissionsByTargetBodyAsync(bodyName);
+
+        if (!missions.Any())
+        {
+            return NotFound($"No missions found targeting '{bodyName}'.");
+        }
+
+        var missionDtos = missions.Select(m => new MissionDto
+        {
+            MissionId = m.MissionId,
+            Name = m.Name,
+            PlannedLaunchDate = m.PlannedLaunchDate,
+            PlannedDuration = m.PlannedDuration,
+            Status = m.Status.ToString(),
+            Type = m.Type.ToString(),
+            
+            ManagerName = m.Manager != null ? m.Manager.Name : "No Manager",
+            RocketModel = m.Rocket != null ? m.Rocket.ModelName : "No Rocket",
+            LaunchPadLocation = m.LaunchPad.Location ?? "No Launchpad",
+            TargetBodyName = m.TargetBody.Name ?? "No Target",
+            
+            Crew = m.Astronauts.Select(a => new AstronautDto
+            {
+                EmployeeId = a.EmployeeId,
+                Name = a.Name,
+                Rank = a.Rank,
+                Paygrade = a.Paygrade,
+                HoursInSpace = a.HoursInSpace,
+                HoursInSimulation = a.HoursInSimulation
+            }).ToList()
+        }).ToList();
+
+        return Ok(missionDtos);
+    }
 }

@@ -35,4 +35,15 @@ public class MissionRepository : IMissionRepository
             .Include(m => m.Scientists)
             .FirstOrDefaultAsync(m => m.MissionId == id);
     }
+    public async Task<IEnumerable<Mission>> GetMissionsByTargetBodyAsync(string targetBodyName)
+    {
+        return await _context.Missions
+            .Include(m => m.Manager)
+            .Include(m => m.Rocket)
+            .Include(m => m.LaunchPad)
+            .Include(m => m.TargetBody)
+            .Include(m => m.Astronauts)
+            .Where(m => m.TargetBody!.Name == targetBodyName)
+            .ToListAsync();
+    }
 }

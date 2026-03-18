@@ -4241,19 +4241,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\julia\\.nuget\\packages\\": {}
+    "C:\\Users\\gusta\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\julia\\backend\\SW4BAD-Assignment-3\\AarhusSpaceProgram.Api.csproj",
+      "projectUniqueName": "C:\\BackendDatabaser\\Assignment3\\SW4BAD-Assignment-3\\AarhusSpaceProgram.Api.csproj",
       "projectName": "AarhusSpaceProgram.Api",
-      "projectPath": "C:\\Users\\julia\\backend\\SW4BAD-Assignment-3\\AarhusSpaceProgram.Api.csproj",
-      "packagesPath": "C:\\Users\\julia\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\julia\\backend\\SW4BAD-Assignment-3\\obj\\",
+      "projectPath": "C:\\BackendDatabaser\\Assignment3\\SW4BAD-Assignment-3\\AarhusSpaceProgram.Api.csproj",
+      "packagesPath": "C:\\Users\\gusta\\.nuget\\packages\\",
+      "outputPath": "C:\\BackendDatabaser\\Assignment3\\SW4BAD-Assignment-3\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\julia\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\gusta\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"

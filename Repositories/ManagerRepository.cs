@@ -13,6 +13,11 @@ public class ManagerRepository : IManagerRepository
         _context = context;
     }
 
+    public async Task<IEnumerable<Manager>> GetAllManagersAsync()
+    {
+        return await _context.Managers.ToListAsync();
+    }
+
     public async Task<Manager> CreateManagerAsync(Manager manager)
     {
         _context.Managers.Add(manager);

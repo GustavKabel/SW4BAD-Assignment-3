@@ -4,6 +4,7 @@ namespace AarhusSpaceProgram.Api.Repositories;
 
 public interface IManagerRepository
 {
+    Task<IEnumerable<Manager>> GetAllManagersAsync();
     Task<Manager> CreateManagerAsync(Manager manager);
 
     Task<Manager?> GetManagerByIdAsync(int id);

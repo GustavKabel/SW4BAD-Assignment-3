@@ -15,6 +15,7 @@ builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<IScientistRepository, ScientistRepository>();
 builder.Services.AddScoped<IAstronautRepository, AstronautRepository>();
 builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 Log.Logger = new LoggerConfiguration()

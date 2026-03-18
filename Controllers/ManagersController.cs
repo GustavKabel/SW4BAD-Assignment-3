@@ -81,4 +81,18 @@ public class ManagersController : ControllerBase
         await _repository.DeleteManagerAsync(id);
         return NoContent();
     }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ManagerDto>>> GetManagers()
+    {
+        var managers = await _repository.GetAllManagersAsync();
+        var dtos = managers.Select(m => new ManagerDto
+        {
+            EmployeeId = m.EmployeeId,
+            Name = m.Name,
+            Department = m.Department,
+        }).ToList();
+
+        return Ok(dtos);
+    }
 }

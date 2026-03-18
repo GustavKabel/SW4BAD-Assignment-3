@@ -7,4 +7,8 @@ public interface IMissionRepository
     Task<IEnumerable<Mission>> GetAllMissionsAsync();
     Task<Mission?> GetMissionByIdAsync(int id);
     Task<IEnumerable<Mission>> GetMissionsByTargetBodyAsync(string targetBodyName);
+    Task<Mission> AddMissionAsync(Mission mission);
+    Task UpdateMissionAsync(Mission mission);
+    Task DeleteMissionAsync(int id);
+    Task<bool> HasMissionOnDateAsync(int launchPadId, DateOnly date, int? excludeMissionId = null);
 }

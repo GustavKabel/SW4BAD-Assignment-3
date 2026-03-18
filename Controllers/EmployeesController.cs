@@ -24,7 +24,7 @@ public class EmployeesController : ControllerBase
         {
             EmployeeId = e.EmployeeId,
             Name = e.Name,
-            HireDate = e.HireDate // <-- Map to DTO
+            HireDate = e.HireDate
         }).ToList();
 
         return Ok(dtos);
@@ -40,18 +40,17 @@ public class EmployeesController : ControllerBase
         {
             EmployeeId = employee.EmployeeId,
             Name = employee.Name,
-            HireDate = employee.HireDate // <-- Map to DTO
+            HireDate = employee.HireDate
         });
     }
 
     [HttpPost]
     public async Task<ActionResult<EmployeeDto>> CreateEmployee(CreateEmployeeDto dto)
     {
-        // Map incoming DTO to entity
         var employee = new Employee 
         { 
             Name = dto.Name,
-            HireDate = dto.HireDate // <-- Save to Database
+            HireDate = dto.HireDate 
         };
         
         var created = await _repository.AddEmployeeAsync(employee);

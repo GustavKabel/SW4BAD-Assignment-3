@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AarhusSpaceProgram.Api.DTOs;
 using AarhusSpaceProgram.Api.Repositories;
+using AarhusSpaceProgram.Api.Entities;
 
 namespace AarhusSpaceProgram.Api.Controllers;
 
@@ -8,18 +9,24 @@ namespace AarhusSpaceProgram.Api.Controllers;
 [Route("api/[controller]")]
 public class MissionsController : ControllerBase
 {
-    private readonly IMissionRepository _repository;
+    private readonly IMissionRepository _missionRepo;
+    private readonly IRocketRepository _rocketRepo;
+    private readonly ILaunchPadRepository _launchPadRepo;
 
-    public MissionsController(IMissionRepository repository)
+    public MissionsController(
+        IMissionRepository missionRepo, 
+        IRocketRepository rocketRepo, 
+        ILaunchPadRepository launchPadRepo)
     {
-        _repository = repository;
+        _missionRepo = missionRepo;
+        _rocketRepo = rocketRepo;
+        _launchPadRepo = launchPadRepo;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MissionDto>>> GetMissions()
     {
-
-        var missions = await _repository.GetAllMissionsAsync();
+        var missions = await _missionRepo.GetAllMissionsAsync();
 
         var missionDtos = missions.Select(m => new MissionDto
         {
@@ -30,20 +37,10 @@ public class MissionsController : ControllerBase
             Status = m.Status.ToString(),
             Type = m.Type.ToString(),
 
-            ManagerName = m.Manager.Name ?? "No Manager",
-            RocketModel = m.Rocket.ModelName ?? "No Rocket",
-            LaunchPadLocation = m.LaunchPad.Location ?? "No Launchpad",
-            TargetBodyName = m.TargetBody.Name ?? "No Target",
-
-            Crew = m.Astronauts.Select(a => new AstronautDto
-            {
-                EmployeeId = a.EmployeeId,
-                Name = a.Name,
-                Rank = a.Rank,
-                Paygrade = a.Paygrade,
-                HoursInSpace = a.HoursInSpace,
-                HoursInSimulation = a.HoursInSimulation
-            }).ToList()
+            ManagerName = m.Manager?.Name ?? "No Manager",
+            RocketModel = m.Rocket?.ModelName ?? "No Rocket",
+            LaunchPadLocation = m.LaunchPad?.Location ?? "No Launchpad",
+            TargetBodyName = m.TargetBody?.Name ?? "No Target",
         }).ToList();
 
         return Ok(missionDtos);
@@ -52,8 +49,7 @@ public class MissionsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<MissionDetailsDto>> GetMissionById(int id)
     {
-        
-        var mission = await _repository.GetMissionByIdAsync(id);
+        var mission = await _missionRepo.GetMissionByIdAsync(id);
 
         if (mission == null)
         {
@@ -99,7 +95,7 @@ public class MissionsController : ControllerBase
     [HttpGet("target/{bodyName}")]
     public async Task<ActionResult<IEnumerable<MissionDto>>> GetMissionsByTargetBody(string bodyName)
     {
-        var missions = await _repository.GetMissionsByTargetBodyAsync(bodyName);
+        var missions = await _missionRepo.GetMissionsByTargetBodyAsync(bodyName);
 
         if (!missions.Any())
         {
@@ -132,5 +128,98 @@ public class MissionsController : ControllerBase
         }).ToList();
 
         return Ok(missionDtos);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<MissionDto>> CreateMission(CreateMissionDto dto)
+    {
+        var rocket = await _rocketRepo.GetRocketByIdAsync(dto.RocketId);
+        var launchPad = await _launchPadRepo.GetLaunchPadByIdAsync(dto.LaunchPadId);
+        
+        if (rocket == null) return BadRequest("The specified rocket does not exist.");
+        if (launchPad == null) return BadRequest("The specified launchpad does not exist.");
+
+        if (rocket.Weight > launchPad.MaxWeight)
+        {
+            return BadRequest($"Rocket weight ({rocket.Weight}) exceeds the launchpad's maximum supported weight ({launchPad.MaxWeight}).");
+        }
+        var isBooked = await _missionRepo.HasMissionOnDateAsync(dto.LaunchPadId, dto.PlannedLaunchDate);
+        if (isBooked)
+        {
+            return BadRequest("This launchpad is already booked for a mission on this date.");
+        }
+
+        var mission = new Mission
+        {
+            Name = dto.Name,
+            PlannedLaunchDate = dto.PlannedLaunchDate,
+            PlannedDuration = dto.PlannedDuration,
+            Type = dto.Type,
+            ManagerId = dto.ManagerId,
+            RocketId = dto.RocketId,
+            LaunchPadId = dto.LaunchPadId,
+            TargetBodyId = dto.TargetBodyId,
+            Status = MissionStatus.Created
+        };
+
+        var created = await _missionRepo.AddMissionAsync(mission);
+
+        return CreatedAtAction(nameof(GetMissionById), new { id = created.MissionId }, new { id = created.MissionId, message = "Mission successfully created. Please call GET /api/Missions/{id} for full details." });
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateMission(int id, UpdateMissionDto dto)
+    {
+        var existing = await _missionRepo.GetMissionByIdAsync(id);
+        if (existing == null) return NotFound($"Mission with ID {id} not found.");
+
+
+        var rocket = await _rocketRepo.GetRocketByIdAsync(dto.RocketId);
+        var launchPad = await _launchPadRepo.GetLaunchPadByIdAsync(dto.LaunchPadId);
+        
+        if (rocket != null && launchPad != null && rocket.Weight > launchPad.MaxWeight)
+        {
+            return BadRequest($"Rocket weight ({rocket.Weight}) exceeds the launchpad's maximum supported weight ({launchPad.MaxWeight}).");
+        }
+
+        // Check schedule conflicts (excluding this exact mission so you don't conflict with yourself)
+        var isBooked = await _missionRepo.HasMissionOnDateAsync(dto.LaunchPadId, dto.PlannedLaunchDate, id);
+        if (isBooked)
+        {
+            return BadRequest("This launchpad is already booked for a different mission on this date.");
+        }
+
+        // State Machine validation (using your custom entity logic)
+        try
+        {
+            existing.UpdateStatus(dto.Status);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+        // Update properties
+        existing.Name = dto.Name;
+        existing.PlannedLaunchDate = dto.PlannedLaunchDate;
+        existing.PlannedDuration = dto.PlannedDuration;
+        existing.Type = dto.Type;
+        existing.ManagerId = dto.ManagerId;
+        existing.RocketId = dto.RocketId;
+        existing.LaunchPadId = dto.LaunchPadId;
+        existing.TargetBodyId = dto.TargetBodyId;
+
+        await _missionRepo.UpdateMissionAsync(existing);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteMission(int id)
+    {
+        var existing = await _missionRepo.GetMissionByIdAsync(id);
+        if (existing == null) return NotFound($"Mission with ID {id} not found.");
+
+        await _missionRepo.DeleteMissionAsync(id);
+        return NoContent();
     }
 }

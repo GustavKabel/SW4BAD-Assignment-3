@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AarhusSpaceProgram.Api.Migrations
 {
     [DbContext(typeof(SpaceProgramContext))]
-    [Migration("20260317123423_SyncModels")]
-    partial class SyncModels
+    [Migration("20260318100218_0001-InitialCreate")]
+    partial class _0001InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AarhusSpaceProgram.Api.Entities;
 [Table("Employee")]
-public abstract class Employee
+public class Employee
 {
     [Key]
     [Column("employee_id")]

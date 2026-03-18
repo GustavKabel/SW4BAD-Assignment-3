@@ -309,7 +309,7 @@ namespace AarhusSpaceProgram.Api.Migrations
                 columns: new[] { "mission_id", "launchpad_id", "manager_id", "name", "planned_duration", "planned_launch_date", "rocket_id", "status", "target_body_id", "type" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, "Apollo 11", 8, new DateOnly(2010, 7, 16), 1, "Completed", 2, "Landing" },
+                    { 1, 1, 1, "Apollo 11", 8, new DateOnly(2010, 7, 16), 1, "Completed", 1, "Landing" },
                     { 2, 2, 2, "Artemis I", 25, new DateOnly(2025, 11, 16), 2, "Active", 2, "Orbiting" }
                 });
 

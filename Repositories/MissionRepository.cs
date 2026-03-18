@@ -82,4 +82,64 @@ public class MissionRepository : IMissionRepository
 
         return await query.AnyAsync();
     }
+
+    public async Task<bool> AssignAstronautAsync(int missionId, int astronautId)
+    {
+        var mission = await _context.Missions.Include(m => m.Astronauts).FirstOrDefaultAsync(m => m.MissionId == missionId);
+        var astronaut = await _context.Astronauts.FindAsync(astronautId);
+
+        if (mission == null || astronaut == null) return false;
+
+        if (!mission.Astronauts.Contains(astronaut))
+        {
+            mission.Astronauts.Add(astronaut);
+            await _context.SaveChangesAsync();
+        }
+        return true;
+    }
+
+    public async Task<bool> RemoveAstronautAsync(int missionId, int astronautId)
+    {
+        var mission = await _context.Missions.Include(m => m.Astronauts).FirstOrDefaultAsync(m => m.MissionId == missionId);
+        var astronaut = await _context.Astronauts.FindAsync(astronautId);
+
+        if (mission == null || astronaut == null) return false;
+
+        if (mission.Astronauts.Contains(astronaut))
+        {
+            mission.Astronauts.Remove(astronaut);
+            await _context.SaveChangesAsync();
+        }
+        return true;
+    }
+
+    public async Task<bool> AssignScientistAsync(int missionId, int scientistId)
+    {
+        var mission = await _context.Missions.Include(m => m.Scientists).FirstOrDefaultAsync(m => m.MissionId == missionId);
+        var scientist = await _context.Scientists.FindAsync(scientistId);
+
+        if (mission == null || scientist == null) return false;
+
+        if (!mission.Scientists.Contains(scientist))
+        {
+            mission.Scientists.Add(scientist);
+            await _context.SaveChangesAsync();
+        }
+        return true;
+    }
+
+    public async Task<bool> RemoveScientistAsync(int missionId, int scientistId)
+    {
+        var mission = await _context.Missions.Include(m => m.Scientists).FirstOrDefaultAsync(m => m.MissionId == missionId);
+        var scientist = await _context.Scientists.FindAsync(scientistId);
+
+        if (mission == null || scientist == null) return false;
+
+        if (mission.Scientists.Contains(scientist))
+        {
+            mission.Scientists.Remove(scientist);
+            await _context.SaveChangesAsync();
+        }
+        return true;
+    }
 }

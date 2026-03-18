@@ -182,14 +182,12 @@ public class MissionsController : ControllerBase
             return BadRequest($"Rocket weight ({rocket.Weight}) exceeds the launchpad's maximum supported weight ({launchPad.MaxWeight}).");
         }
 
-        // Check schedule conflicts (excluding this exact mission so you don't conflict with yourself)
         var isBooked = await _missionRepo.HasMissionOnDateAsync(dto.LaunchPadId, dto.PlannedLaunchDate, id);
         if (isBooked)
         {
             return BadRequest("This launchpad is already booked for a different mission on this date.");
         }
 
-        // State Machine validation (using your custom entity logic)
         try
         {
             existing.UpdateStatus(dto.Status);
@@ -199,7 +197,7 @@ public class MissionsController : ControllerBase
             return BadRequest(ex.Message);
         }
 
-        // Update properties
+        
         existing.Name = dto.Name;
         existing.PlannedLaunchDate = dto.PlannedLaunchDate;
         existing.PlannedDuration = dto.PlannedDuration;
@@ -221,5 +219,45 @@ public class MissionsController : ControllerBase
 
         await _missionRepo.DeleteMissionAsync(id);
         return NoContent();
+    }
+
+    [HttpPost("{missionId}/astronauts/{astronautId}")]
+    public async Task<IActionResult> AssignAstronaut(int missionId, int astronautId)
+    {
+        var success = await _missionRepo.AssignAstronautAsync(missionId, astronautId);
+        
+        if (!success) return NotFound("Either the Mission or the Astronaut was not found.");
+        
+        return Ok(new { message = $"Astronaut {astronautId} was successfully assigned to Mission {missionId}." });
+    }
+
+    [HttpDelete("{missionId}/astronauts/{astronautId}")]
+    public async Task<IActionResult> RemoveAstronaut(int missionId, int astronautId)
+    {
+        var success = await _missionRepo.RemoveAstronautAsync(missionId, astronautId);
+        
+        if (!success) return NotFound("Either the Mission or the Astronaut was not found.");
+        
+        return Ok(new { message = $"Astronaut {astronautId} was successfully removed from Mission {missionId}." });
+    }
+
+    [HttpPost("{missionId}/scientists/{scientistId}")]
+    public async Task<IActionResult> AssignScientist(int missionId, int scientistId)
+    {
+        var success = await _missionRepo.AssignScientistAsync(missionId, scientistId);
+        
+        if (!success) return NotFound("Either the Mission or the Scientist was not found.");
+        
+        return Ok(new { message = $"Scientist {scientistId} was successfully assigned to Mission {missionId}." });
+    }
+
+    [HttpDelete("{missionId}/scientists/{scientistId}")]
+    public async Task<IActionResult> RemoveScientist(int missionId, int scientistId)
+    {
+        var success = await _missionRepo.RemoveScientistAsync(missionId, scientistId);
+        
+        if (!success) return NotFound("Either the Mission or the Scientist was not found.");
+        
+        return Ok(new { message = $"Scientist {scientistId} was successfully removed from Mission {missionId}." });
     }
 }

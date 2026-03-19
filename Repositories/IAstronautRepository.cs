@@ -13,4 +13,6 @@ public interface IAstronautRepository
     Task UpdateAstronautAsync(Astronaut astronaut);
 
     Task DeleteAstronautAsync(int id);
+
+    Task<IEnumerable<Astronaut>> GetAllAstronautsAsync();
 }

@@ -99,6 +99,7 @@ public class AstronautsController : ControllerBase
 
         return NoContent();
     }
+    
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAstronaut(int id)
     {
@@ -109,5 +110,22 @@ public class AstronautsController : ControllerBase
         }
         await _repository.DeleteAstronautAsync(id);
         return NoContent();
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<AstronautDto>>> GetAstronauts()
+    {
+        var astronauts = await _repository.GetAllAstronautsAsync();
+        var dtos = astronauts.Select(a => new AstronautDto
+        {
+            EmployeeId = a.EmployeeId,
+            Name = a.Name,
+            Rank = a.Rank,
+            Paygrade = a.Paygrade,
+            HoursInSpace = a.HoursInSpace,
+            HoursInSimulation = a.HoursInSimulation
+        }).ToList();
+
+        return Ok(dtos);
     }
 }

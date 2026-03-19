@@ -52,4 +52,9 @@ public class AstronautRepository : IAstronautRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<IEnumerable<Astronaut>> GetAllAstronautsAsync()
+    {
+        return await _context.Astronauts.ToListAsync();
+    }
 }

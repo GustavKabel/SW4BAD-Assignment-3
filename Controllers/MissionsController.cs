@@ -116,15 +116,6 @@ public class MissionsController : ControllerBase
             LaunchPadLocation = m.LaunchPad.Location ?? "No Launchpad",
             TargetBodyName = m.TargetBody.Name ?? "No Target",
             
-            Crew = m.Astronauts.Select(a => new AstronautDto
-            {
-                EmployeeId = a.EmployeeId,
-                Name = a.Name,
-                Rank = a.Rank,
-                Paygrade = a.Paygrade,
-                HoursInSpace = a.HoursInSpace,
-                HoursInSimulation = a.HoursInSimulation
-            }).ToList()
         }).ToList();
 
         return Ok(missionDtos);

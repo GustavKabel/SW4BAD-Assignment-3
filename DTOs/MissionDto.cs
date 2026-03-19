@@ -13,5 +13,4 @@ public class MissionDto
     public string RocketModel { get; set; } = string.Empty;
     public string LaunchPadLocation { get; set; } = string.Empty;
     public string TargetBodyName { get; set; } = string.Empty;
-    public List<AstronautDto> Crew { get; set; } = new();
 }

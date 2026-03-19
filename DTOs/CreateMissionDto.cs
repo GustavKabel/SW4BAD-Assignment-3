@@ -15,7 +15,7 @@ public class CreateMissionDto
     [Required]
     public TypeOfMission Type { get; set; }
 
-    public int ManagerId { get; set; }
+    public int? ManagerId { get; set; }
     public int RocketId { get; set; }
     public int LaunchPadId { get; set; }
     public int TargetBodyId { get; set; }

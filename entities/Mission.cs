@@ -66,6 +66,16 @@ public class Mission
         {
             throw new InvalidOperationException("Only active missions can move to completed, failed or aborted");
         }
+        // Ensure that at least one astronauts have been assigned to a mission before launch
+        if (newStatus == MissionStatus.Active)
+        {
+            if (Astronauts.Count == 0)
+            {
+                throw new InvalidOperationException("A mission cannot launch without atleast one assigned Astronaut");
+            }
+        }
+
+        Status = newStatus;
     }
 
     //Type of mission
@@ -78,10 +88,10 @@ public class Mission
 
     //Foreign key for manager id
     [Column("manager_id")]
-    public int ManagerId { get; set; }
+    public int? ManagerId { get; set; }
 
     [ForeignKey(nameof(ManagerId))]
-    public Manager Manager { get; set; } = null!;
+    public Manager? Manager { get; set; } = null!;
 
     //Foreign key for rocket id
     [Column("rocket_id")]

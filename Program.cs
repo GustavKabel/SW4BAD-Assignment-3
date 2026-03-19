@@ -20,13 +20,9 @@ builder.Services.AddScoped<IRocketRepository, RocketRepository>();
 builder.Services.AddScoped<ILaunchPadRepository, LaunchPadRepository>();
 
 var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
+
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
-    .WriteTo.Console()
-    //.WriteTo.MongoDBBson(cfg =>
-    //{
-    //    cfg.SetMongoUrl(mongoConnectionString);
-    //})
     .CreateLogger();
 
 builder.Host.UseSerilog();
@@ -52,7 +48,29 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Enable OpenAPI + Scalar
+app.Use(async (context, next) =>
+{
+    // Let the request be processed by the API first
+    await next(); 
+
+    var method = context.Request.Method;
+
+    // Check if it's a modifying request (POST, PUT, DELETE)
+    if (HttpMethods.IsPost(method) || HttpMethods.IsPut(method) || HttpMethods.IsDelete(method))
+    {
+        // Get the logger
+        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        
+        // Log the required details (Timestamp is automatically added by Serilog)
+        logger.LogInformation(
+            "Action: {HttpMethod} {RequestPath} | Status: {StatusCode}", 
+            method, 
+            context.Request.Path, 
+            context.Response.StatusCode);
+    }
+});
+// ---------------------------
+
 app.MapOpenApi("/openapi/v1.json");
 app.MapScalarApiReference(options =>
 {

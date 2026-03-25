@@ -29,3 +29,7 @@ Gustav Helbo Kabel, Studienummer: 202206753, AUID: AU729039
 
 Much of the code was written in sessions of pair programming while reguarly swapping the coder and observer roles. This approach was used in all steps of the assignment.
 
+### ER Diagram
+
+Can be found in the file aspErDiagram.drawio.png in the project folder
+

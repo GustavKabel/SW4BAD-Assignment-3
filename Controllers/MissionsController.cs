@@ -34,8 +34,8 @@ public class MissionsController : ControllerBase
             Name = m.Name,
             PlannedLaunchDate = m.PlannedLaunchDate,
             PlannedDuration = m.PlannedDuration,
-            Status = m.Status.ToString(),
-            Type = m.Type.ToString(),
+            Status = m.Status,
+            Type = m.Type,
 
             ManagerName = m.Manager?.Name ?? "No Manager",
             RocketModel = m.Rocket?.ModelName ?? "No Rocket",
@@ -62,8 +62,8 @@ public class MissionsController : ControllerBase
             Name = mission.Name,
             PlannedLaunchDate = mission.PlannedLaunchDate,
             PlannedDuration = mission.PlannedDuration,
-            Status = mission.Status.ToString(),
-            Type = mission.Type.ToString(),
+            Status = mission.Status,
+            Type = mission.Type,
             
             ManagerName = mission.Manager != null ? mission.Manager.Name : "No Manager",
             RocketModel = mission.Rocket != null ? mission.Rocket.ModelName : "No Rocket",
@@ -108,8 +108,8 @@ public class MissionsController : ControllerBase
             Name = m.Name,
             PlannedLaunchDate = m.PlannedLaunchDate,
             PlannedDuration = m.PlannedDuration,
-            Status = m.Status.ToString(),
-            Type = m.Type.ToString(),
+            Status = m.Status,
+            Type = m.Type,
             
             ManagerName = m.Manager != null ? m.Manager.Name : "No Manager",
             RocketModel = m.Rocket != null ? m.Rocket.ModelName : "No Rocket",

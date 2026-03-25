@@ -10,7 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
-builder.Services.AddControllers();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
+
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
+
 builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<IScientistRepository, ScientistRepository>();
 builder.Services.AddScoped<IAstronautRepository, AstronautRepository>();
@@ -18,6 +29,7 @@ builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IRocketRepository, RocketRepository>();
 builder.Services.AddScoped<ILaunchPadRepository, LaunchPadRepository>();
+
 
 var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 
@@ -50,18 +62,14 @@ using (var scope = app.Services.CreateScope())
 
 app.Use(async (context, next) =>
 {
-    // Let the request be processed by the API first
     await next(); 
 
     var method = context.Request.Method;
 
-    // Check if it's a modifying request (POST, PUT, DELETE)
     if (HttpMethods.IsPost(method) || HttpMethods.IsPut(method) || HttpMethods.IsDelete(method))
     {
-        // Get the logger
         var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
         
-        // Log the required details (Timestamp is automatically added by Serilog)
         logger.LogInformation(
             "Action: {HttpMethod} {RequestPath} | Status: {StatusCode}", 
             method, 
@@ -69,7 +77,6 @@ app.Use(async (context, next) =>
             context.Response.StatusCode);
     }
 });
-// ---------------------------
 
 app.MapOpenApi("/openapi/v1.json");
 app.MapScalarApiReference(options =>

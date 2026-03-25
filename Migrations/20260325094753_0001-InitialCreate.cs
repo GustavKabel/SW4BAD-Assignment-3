@@ -152,7 +152,7 @@ namespace AarhusSpaceProgram.Api.Migrations
                     planned_duration = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "varchar(50)", nullable: false),
                     type = table.Column<string>(type: "varchar(50)", nullable: false),
-                    manager_id = table.Column<int>(type: "int", nullable: false),
+                    manager_id = table.Column<int>(type: "int", nullable: true),
                     rocket_id = table.Column<int>(type: "int", nullable: false),
                     launchpad_id = table.Column<int>(type: "int", nullable: false),
                     target_body_id = table.Column<int>(type: "int", nullable: false)
@@ -176,8 +176,7 @@ namespace AarhusSpaceProgram.Api.Migrations
                         name: "FK_Mission_Manager_manager_id",
                         column: x => x.manager_id,
                         principalTable: "Manager",
-                        principalColumn: "employee_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "employee_id");
                     table.ForeignKey(
                         name: "FK_Mission_Rocket_rocket_id",
                         column: x => x.rocket_id,

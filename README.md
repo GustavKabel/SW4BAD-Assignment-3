@@ -1,11 +1,23 @@
-README for randomguydk/imagetest 
+# Aarhus Space Program API
+**Group 29**
 
-1. Docker Hub Image name: randomguydk/imagetest:latest
+Welcome to our Aarhus Space Program API!
 
-2. How to run: 
-                1. Ensure Docker Daemon is running
-                2. Navigate to the project folder
-                3. Run: "Docker compose up" in terminal
+## Important URLs
 
-3. URL for Scalar: http://localhost:8080/scalar/
+- **API Base URL:** `http://localhost:8080/api`
+- **Scalar UI URL:** `http://localhost:8080/scalar/`
+- **OpenAPI JSON URL:** `http://localhost:8080/openapi/v1.json`
+
+## Setting up
+
+### Prerequisites
+
+- Ensure Docker daemon is running
+- .NET 9.0 / 10.0
+
+### Running the API
+
+1. Navigate to the root of the project
+2. run "docker compose up --build -d" in terminal
 

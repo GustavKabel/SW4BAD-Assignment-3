@@ -23,7 +23,7 @@ public class SpaceProgramContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // This is for inheritance for employees
+        
         modelBuilder.Entity<Employee>().UseTptMappingStrategy();
 
         // Now we make Fluent API for our many-to-many relations
@@ -69,7 +69,8 @@ public class SpaceProgramContext : DbContext
         .WithOne(r => r.Mission)
         .HasForeignKey<Mission>(m => m.RocketId);
 
-        // Part D. Extra Rules
+        // Part D. Extra Rules:
+
         // Ensure rocket weight cannot be negative
         modelBuilder.Entity<Rocket>()
         .ToTable(t => t.HasCheckConstraint("CK_Rocket_Weight", "weight >= 0 "));

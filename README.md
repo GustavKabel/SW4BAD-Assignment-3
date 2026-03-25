@@ -3,6 +3,9 @@
 
 Welcome to our Aarhus Space Program API!
 
+Julian Brask Christensen, Studienummer: 202108350, AUID: AU705048
+Gustav Helbo Kabel, Studienummer: 202206753, AUID: AU729039
+
 ## Important URLs
 
 - **API Base URL:** `http://localhost:8080/api`

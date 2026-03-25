@@ -80,35 +80,28 @@ public class Mission
 
     //Type of mission
     [Required]
-    //[StringLength(50, ErrorMessage = "Type cannot exceed 50 characters.")]
     [Column("type", TypeName = "varchar(50)")]
     public TypeOfMission Type { get; set; } = TypeOfMission.None;
 
     // Foreign Keys
-
-    //Foreign key for manager id
+    
     [Column("manager_id")]
     public int? ManagerId { get; set; }
 
     [ForeignKey(nameof(ManagerId))]
     public Manager? Manager { get; set; } = null!;
 
-    //Foreign key for rocket id
     [Column("rocket_id")]
     public int RocketId { get; set; }
-    /*
-    [ForeignKey(nameof(RocketId))]
-    */
+
     public Rocket Rocket { get; set; } = null!;
 
-    //Foreign key for launchpad id
     [Column("launchpad_id")]
     public int LaunchPadId { get; set; }
 
     [ForeignKey(nameof(LaunchPadId))]
     public LaunchPad LaunchPad { get; set; } = null!;
 
-    //Foreign key for target body id
     [Column("target_body_id")]
     public int TargetBodyId { get; set; }
     [ForeignKey(nameof(TargetBodyId))]

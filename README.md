@@ -4,6 +4,7 @@
 Welcome to our Aarhus Space Program API!
 
 Julian Brask Christensen, Studienummer: 202108350, AUID: AU705048
+
 Gustav Helbo Kabel, Studienummer: 202206753, AUID: AU729039
 
 ## Important URLs
@@ -23,4 +24,8 @@ Gustav Helbo Kabel, Studienummer: 202206753, AUID: AU729039
 
 1. Navigate to the root of the project
 2. run "docker compose up --build -d" in terminal
+
+### Contribution report
+
+Much of the code was written in sessions of pair programming while reguarly swapping the coder and observer roles. This approach was used in all steps of the assignment.
 

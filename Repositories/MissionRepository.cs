@@ -42,7 +42,7 @@ public class MissionRepository : IMissionRepository
             .Include(m => m.LaunchPad)
             .Include(m => m.TargetBody)
             .Include(m => m.Astronauts)
-            .Where(m => m.TargetBody!.Name == targetBodyName)
+            .Where(m => m.TargetBody.Name == targetBodyName)
             .ToListAsync();
     }
 

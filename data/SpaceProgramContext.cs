@@ -23,7 +23,7 @@ public class SpaceProgramContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        
+        // Ensure Inheritance of Employee entities
         modelBuilder.Entity<Employee>().UseTptMappingStrategy();
 
         // Now we make Fluent API for our many-to-many relations

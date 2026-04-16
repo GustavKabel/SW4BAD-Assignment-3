@@ -1,11 +1,10 @@
 using AarhusSpaceProgram.Api.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AarhusSpaceProgram.Api.Data;
 
-
-
-public class SpaceProgramContext : DbContext
+public class SpaceProgramContext : IdentityDbContext<AppUser>
 {
     public SpaceProgramContext(DbContextOptions<SpaceProgramContext> options) : base(options) { }
     public DbSet<Employee> Employees { get; set; } = null!;

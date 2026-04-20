@@ -46,7 +46,7 @@ public class AccountController : ControllerBase
                     FullName = input.FullName
                 };
                 var result = await _userManager.CreateAsync(
-                newUser, input.Password);
+                newUser, input.Password!);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(
@@ -80,18 +80,18 @@ public class AccountController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(input.UserName);
-                if (user == null || !await _userManager.CheckPasswordAsync(user, input.Password))
+                var user = await _userManager.FindByNameAsync(input.UserName!);
+                if (user == null || !await _userManager.CheckPasswordAsync(user, input.Password!))
                     throw new Exception("Invalid login attempt.");
                 else
                 {
                     var signingCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(
-                    System.Text.Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"])),
+                    System.Text.Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"]!)),
                     SecurityAlgorithms.HmacSha256);
                     var claims = new List<Claim>
                     {
-                        new(ClaimTypes.Name, user.UserName)
+                        new(ClaimTypes.Name, user.UserName!)
                     };
                     var jwtObject = new JwtSecurityToken(
                     issuer: _configuration["JWT:Issuer"],

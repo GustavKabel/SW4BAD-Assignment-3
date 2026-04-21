@@ -9,6 +9,7 @@ using AarhusSpaceProgram.Api.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using System.Security.Claims;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,6 +75,21 @@ builder.Services.AddAuthentication(options =>
     System.Text.Encoding.UTF8.GetBytes(
     builder.Configuration["JWT:SigningKey"]))
     };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    // read-only
+    options.AddPolicy("ReadOnly", policy =>
+        policy.RequireClaim(ClaimTypes.Role, "Astronaut"));
+
+    // full access to experiments
+    options.AddPolicy("FullAccessExperiment", policy =>
+        policy.RequireClaim(ClaimTypes.Role, "Scientist"));
+
+    // full access to everything
+    options.AddPolicy("ManagerFullAccess", policy =>
+        policy.RequireClaim(ClaimTypes.Role, "Manager"));
 });
 
 //Add requirements to the password

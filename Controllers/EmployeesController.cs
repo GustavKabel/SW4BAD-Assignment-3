@@ -17,7 +17,7 @@ public class EmployeesController : ControllerBase
     {
         _repository = repository;
     }
-
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployees()
     {
@@ -31,7 +31,7 @@ public class EmployeesController : ControllerBase
 
         return Ok(dtos);
     }
-
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet("{id}")]
     public async Task<ActionResult<EmployeeDto>> GetEmployeeById(int id)
     {
@@ -45,7 +45,7 @@ public class EmployeesController : ControllerBase
             HireDate = employee.HireDate
         });
     }
-
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPost]
     public async Task<ActionResult<EmployeeDto>> CreateEmployee(CreateEmployeeDto dto)
     {
@@ -67,6 +67,7 @@ public class EmployeesController : ControllerBase
         return CreatedAtAction(nameof(GetEmployeeById), new { id = returnDto.EmployeeId }, returnDto);
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployee(int id, UpdateEmployeeDto dto)
     {
@@ -80,7 +81,8 @@ public class EmployeesController : ControllerBase
 
         return NoContent();
     }
-
+    
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployee(int id)
     {

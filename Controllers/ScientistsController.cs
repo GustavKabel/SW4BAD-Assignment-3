@@ -18,6 +18,7 @@ public class ScientistsController : ControllerBase
         _repository = repository;
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ScientistDto>>> GetScientists()
     {
@@ -34,6 +35,7 @@ public class ScientistsController : ControllerBase
         return Ok(scientistDtos);
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet("{id}")]
     public async Task<ActionResult<ScientistDto>> GetScientistById(int id)
     {
@@ -49,6 +51,7 @@ public class ScientistsController : ControllerBase
         });
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPost]
     public async Task<ActionResult<ScientistDto>> CreateScientist(CreateScientistDto dto)
     {
@@ -72,6 +75,7 @@ public class ScientistsController : ControllerBase
         return Created($"/api/Scientists/{returnDto.EmployeeId}", returnDto);
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateScientist(int id, UpdateScientistDto dto)
     {
@@ -86,6 +90,7 @@ public class ScientistsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteScientist(int id)
     {

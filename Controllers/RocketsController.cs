@@ -18,6 +18,7 @@ public class RocketsController : ControllerBase
         _repository = repository;
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<RocketDto>>> GetRockets()
     {
@@ -36,6 +37,7 @@ public class RocketsController : ControllerBase
         return Ok(dtos);
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet("{id}")]
     public async Task<ActionResult<RocketDto>> GetRocketById(int id)
     {
@@ -54,6 +56,7 @@ public class RocketsController : ControllerBase
         });
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPost]
     public async Task<ActionResult<RocketDto>> CreateRocket(CreateRocketDto dto)
     {
@@ -83,6 +86,7 @@ public class RocketsController : ControllerBase
         return CreatedAtAction(nameof(GetRocketById), new { id = returnDto.RocketId }, returnDto);
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRocket(int id, UpdateRocketDto dto)
     {
@@ -101,6 +105,7 @@ public class RocketsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRocket(int id)
     {

@@ -81,11 +81,15 @@ builder.Services.AddAuthorization(options =>
 {
     // read-only
     options.AddPolicy("ReadOnly", policy =>
-        policy.RequireClaim(ClaimTypes.Role, "Astronaut"));
+        policy.RequireClaim(ClaimTypes.Role, "Astronaut", "Manager"));
 
-    // full access to experiments
-    options.AddPolicy("FullAccessExperiment", policy =>
-        policy.RequireClaim(ClaimTypes.Role, "Scientist"));
+    // Anyone can view experiments
+    options.AddPolicy("CanViewExperiments", policy =>
+        policy.RequireClaim(ClaimTypes.Role, "Astronaut", "Scientist", "Manager"));
+
+    // Only Scientists and Managers can modify experiments
+    options.AddPolicy("CanModifyExperiments", policy =>
+        policy.RequireClaim(ClaimTypes.Role, "Scientist", "Manager"));
 
     // full access to everything
     options.AddPolicy("ManagerFullAccess", policy =>
@@ -124,6 +128,8 @@ using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<SpaceProgramContext>();
         dbContext.Database.Migrate();
+
+        await SeedData.InitializeAsync(services);
     }
     catch (Exception ex)
     {

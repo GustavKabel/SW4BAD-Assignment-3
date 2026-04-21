@@ -17,6 +17,7 @@ public class AstronautsController : ControllerBase
         _repository = repository;
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet("experience")]
     public async Task<ActionResult<IEnumerable<AstronautDto>>> GetAstronautExperience()
     {
@@ -35,6 +36,7 @@ public class AstronautsController : ControllerBase
         return Ok(astronautDtos);
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPost]
     public async Task<ActionResult<AstronautDto>> CreateAstronaut(CreateAstronautDto dto)
     {
@@ -62,6 +64,7 @@ public class AstronautsController : ControllerBase
         return Created($"/api/Astronauts/{returnDto.EmployeeId}", returnDto);
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet("{id}")]
     public async Task<ActionResult<AstronautDto>> GetAstronautById(int id)
     {
@@ -81,6 +84,7 @@ public class AstronautsController : ControllerBase
         });
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAstronaut(int id, UpdateAstronautDto dto)
     {
@@ -101,6 +105,7 @@ public class AstronautsController : ControllerBase
         return NoContent();
     }
     
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAstronaut(int id)
     {
@@ -113,6 +118,7 @@ public class AstronautsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AstronautDto>>> GetAstronauts()
     {

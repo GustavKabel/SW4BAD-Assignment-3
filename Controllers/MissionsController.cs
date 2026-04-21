@@ -49,6 +49,7 @@ public class MissionsController : ControllerBase
         return Ok(missionDtos);
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet("{id}")]
     public async Task<ActionResult<MissionDetailsDto>> GetMissionById(int id)
     {
@@ -95,6 +96,7 @@ public class MissionsController : ControllerBase
         return Ok(missionDetailsDto);
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet("target/{bodyName}")]
     public async Task<ActionResult<IEnumerable<MissionDto>>> GetMissionsByTargetBody(string bodyName)
     {
@@ -124,6 +126,7 @@ public class MissionsController : ControllerBase
         return Ok(missionDtos);
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPost]
     public async Task<ActionResult<MissionDto>> CreateMission(CreateMissionDto dto)
     {
@@ -161,6 +164,7 @@ public class MissionsController : ControllerBase
         return CreatedAtAction(nameof(GetMissionById), new { id = created.MissionId }, new { id = created.MissionId, message = "Mission successfully created. Please call GET /api/Missions/{id} for full details." });
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMission(int id, UpdateMissionDto dto)
     {
@@ -205,6 +209,7 @@ public class MissionsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMission(int id)
     {
@@ -215,6 +220,7 @@ public class MissionsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPost("{missionId}/astronauts/{astronautId}")]
     public async Task<IActionResult> AssignAstronaut(int missionId, int astronautId)
     {
@@ -225,6 +231,7 @@ public class MissionsController : ControllerBase
         return Ok(new { message = $"Astronaut {astronautId} was successfully assigned to Mission {missionId}." });
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpDelete("{missionId}/astronauts/{astronautId}")]
     public async Task<IActionResult> RemoveAstronaut(int missionId, int astronautId)
     {
@@ -235,6 +242,7 @@ public class MissionsController : ControllerBase
         return Ok(new { message = $"Astronaut {astronautId} was successfully removed from Mission {missionId}." });
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPost("{missionId}/scientists/{scientistId}")]
     public async Task<IActionResult> AssignScientist(int missionId, int scientistId)
     {
@@ -245,6 +253,7 @@ public class MissionsController : ControllerBase
         return Ok(new { message = $"Scientist {scientistId} was successfully assigned to Mission {missionId}." });
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpDelete("{missionId}/scientists/{scientistId}")]
     public async Task<IActionResult> RemoveScientist(int missionId, int scientistId)
     {

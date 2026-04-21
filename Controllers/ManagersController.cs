@@ -18,6 +18,7 @@ public class ManagersController : ControllerBase
         _repository = repository;
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPost]
     public async Task<ActionResult<ManagerDto>> CreateManager(CreateManagerDto dto)
     {
@@ -39,6 +40,7 @@ public class ManagersController : ControllerBase
         return Created($"/api/Managers/{returnDto.EmployeeId}", returnDto);
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet("{id}")]
     public async Task<ActionResult<ManagerDto>> GetManagerById(int id)
     {
@@ -55,6 +57,7 @@ public class ManagersController : ControllerBase
         });
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateManager(int id, UpdateManagerDto dto)
     {
@@ -72,6 +75,7 @@ public class ManagersController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "ManagerFullAccess")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteManager(int id)
     {
@@ -84,6 +88,7 @@ public class ManagersController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "ReadOnly")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ManagerDto>>> GetManagers()
     {

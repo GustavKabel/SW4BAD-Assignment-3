@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AarhusSpaceProgram.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
@@ -33,6 +35,8 @@ public class AccountController : ControllerBase
     }
 
     //TODO: maybe insert the correct HTTP request for register
+    [AllowAnonymous]
+    [HttpPost("Register")]
     public async Task<ActionResult> Register(RegisterDTO input)
     {
         try
@@ -74,6 +78,8 @@ public class AccountController : ControllerBase
     }
 
     //TODO: maybe insert the correct HTTP request for login
+    [AllowAnonymous]
+    [HttpPost("login")]
     public async Task<ActionResult> Login(LoginDTO input)
     {
         try
@@ -87,12 +93,17 @@ public class AccountController : ControllerBase
                 {
                     var signingCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(
-                    System.Text.Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"]!)),
+                    System.Text.Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"])),
                     SecurityAlgorithms.HmacSha256);
+
                     var claims = new List<Claim>
                     {
                         new(ClaimTypes.Name, user.UserName!)
                     };
+
+                    var roles = await _userManager.GetRolesAsync(user);
+                    claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
                     var jwtObject = new JwtSecurityToken(
                     issuer: _configuration["JWT:Issuer"],
                     audience: _configuration["JWT:Audience"],

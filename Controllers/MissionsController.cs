@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using AarhusSpaceProgram.Api.DTOs;
 using AarhusSpaceProgram.Api.Repositories;
 using AarhusSpaceProgram.Api.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AarhusSpaceProgram.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class MissionsController : ControllerBase
@@ -23,6 +25,7 @@ public class MissionsController : ControllerBase
         _launchPadRepo = launchPadRepo;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MissionDto>>> GetMissions()
     {

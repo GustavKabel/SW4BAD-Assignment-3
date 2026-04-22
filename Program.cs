@@ -18,20 +18,27 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Components ??= new();
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+        document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
         {
-            document.Components ??= new();
-            document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
-            document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
-            {
-                In = ParameterLocation.Header,
-                Description = "Please enter token",
-                Name = "Authorization",
-                Type = SecuritySchemeType.Http,
-                BearerFormat = "JWT",
-                Scheme = "bearer"
-            });
-            return Task.CompletedTask;
+            In = ParameterLocation.Header,
+            Description = "Please enter token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "bearer"
         });
+
+        document.Security ??= new List<OpenApiSecurityRequirement>();
+        document.Security.Add(new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>()
+        });
+
+        return Task.CompletedTask;
+    });
 });
 
 builder.Services.AddControllers()
@@ -52,6 +59,17 @@ builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IRocketRepository, RocketRepository>();
 builder.Services.AddScoped<ILaunchPadRepository, LaunchPadRepository>();
+
+//Add requirements to the password
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 8;
+})
+.AddEntityFrameworkStores<SpaceProgramContext>();
 
 //Add authentication service
 builder.Services.AddAuthentication(options =>
@@ -95,17 +113,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ManagerFullAccess", policy =>
         policy.RequireClaim(ClaimTypes.Role, "Manager"));
 });
-
-//Add requirements to the password
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequiredLength = 8;
-})
-.AddEntityFrameworkStores<SpaceProgramContext>();
 
 var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 

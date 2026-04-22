@@ -108,7 +108,7 @@ public class AccountController : ControllerBase
                     issuer: _configuration["JWT:Issuer"],
                     audience: _configuration["JWT:Audience"],
                     claims: claims,
-                    expires: DateTime.Now.AddSeconds(300),
+                    expires: DateTime.Now.AddSeconds(3600),
                     signingCredentials: signingCredentials);
                     var jwtString = new JwtSecurityTokenHandler()
                     .WriteToken(jwtObject);

@@ -1,7 +1,9 @@
 services:
   api:
     image: randomguydk/aarhusspaceprogram:latest
-    build: .
+    build: 
+      context: ./WebApi
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
@@ -12,6 +14,22 @@ services:
     environment:
       - ConnectionStrings__SqlServer=Data Source=db;Initial Catalog=AarhusSpaceProgram;User ID=sa;Password=QJN63mdy;Trust Server Certificate=True;
       - ConnectionStrings__MongoDb=mongodb://mongodb:27017/AarhusSpaceLogs  
+
+  worker:
+    build: 
+      context: ./MissionLogGenerator
+      dockerfile: Dockerfile
+    depends_on:
+      api:
+        condition: service_started
+      mongodb:
+        condition: service_started
+    environment:
+      # Use the exact same MongoDB connection string as the API
+      - ConnectionStrings__MongoDb=mongodb://mongodb:27017/AarhusSpaceLogs
+      # The internal Docker network URL to reach the API service
+      - WebApiBaseUrl=http://api:8080
+
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
@@ -25,11 +43,13 @@ services:
       retries: 10
       start_period: 20s
       timeout: 5s
+
   mongodb:
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+
 volumes:
   mongodb_data:

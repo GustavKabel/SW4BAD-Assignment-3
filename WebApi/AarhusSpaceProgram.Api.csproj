@@ -27,4 +27,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="MissionLogGenerator\**" />
+    <Content Remove="MissionLogGenerator\**" />
+    <EmbeddedResource Remove="MissionLogGenerator\**" />
+    <None Remove="MissionLogGenerator\**" />
+  </ItemGroup>
 </Project>

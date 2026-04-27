@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/WebApi/">
+    <Project Path="WebApi/AarhusSpaceProgram.Api.csproj" />
+  </Folder>
+  <Project Path="MissionLogGenerator/MissionLogGenerator.csproj" />
+</Solution>

@@ -109,4 +109,5 @@ public class Mission
 
     public ICollection<Astronaut> Astronauts { get; set; } = new HashSet<Astronaut>();
     public ICollection<Scientist> Scientists { get; set; } = new HashSet<Scientist>();
+    public ICollection<Experiment> Experiments { get; set; } = new HashSet<Experiment>();
 }

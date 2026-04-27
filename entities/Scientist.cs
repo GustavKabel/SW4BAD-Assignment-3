@@ -16,4 +16,6 @@ public class Scientist : Employee
     public string Speciality { get; set; } = string.Empty;
 
     public ICollection<Mission> Missions { get; set; } = new HashSet<Mission>();
+
+    public ICollection<Experiment> Experiments { get; set; } = new HashSet<Experiment>();
 }

@@ -59,6 +59,7 @@ builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IRocketRepository, RocketRepository>();
 builder.Services.AddScoped<ILaunchPadRepository, LaunchPadRepository>();
+builder.Services.AddScoped<IExperimentRepository, ExperimentRepository>();
 
 //Add requirements to the password
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>

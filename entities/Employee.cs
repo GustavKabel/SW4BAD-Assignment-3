@@ -16,4 +16,7 @@ public class Employee
 
     [Column("hire_date")]
     public DateOnly HireDate { get; set; }
+
+    public string? AppUserId { get; set; }
+    public AppUser? AppUser { get; set; }
 }

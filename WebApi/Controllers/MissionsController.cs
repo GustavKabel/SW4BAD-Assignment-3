@@ -16,8 +16,8 @@ public class MissionsController : ControllerBase
     private readonly ILaunchPadRepository _launchPadRepo;
 
     public MissionsController(
-        IMissionRepository missionRepo, 
-        IRocketRepository rocketRepo, 
+        IMissionRepository missionRepo,
+        IRocketRepository rocketRepo,
         ILaunchPadRepository launchPadRepo)
     {
         _missionRepo = missionRepo;
@@ -27,9 +27,18 @@ public class MissionsController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MissionDto>>> GetMissions()
+    public async Task<ActionResult<IEnumerable<MissionDto>>> GetMissions([FromQuery] string? status)
     {
         var missions = await _missionRepo.GetAllMissionsAsync();
+
+        if (!string.IsNullOrEmpty(status))
+        {
+            // This converts the string "Active" into the MissionStatus enum
+            if (Enum.TryParse<MissionStatus>(status, true, out var parsedStatus))
+            {
+                missions = missions.Where(m => m.Status == parsedStatus).ToList();
+            }
+        }
 
         var missionDtos = missions.Select(m => new MissionDto
         {
@@ -68,12 +77,12 @@ public class MissionsController : ControllerBase
             PlannedDuration = mission.PlannedDuration,
             Status = mission.Status,
             Type = mission.Type,
-            
+
             ManagerName = mission.Manager != null ? mission.Manager.Name : "No Manager",
             RocketModel = mission.Rocket != null ? mission.Rocket.ModelName : "No Rocket",
             LaunchPadLocation = mission.LaunchPad.Location ?? "No Launchpad",
             TargetBodyName = mission.TargetBody.Name ?? "No Target",
-            
+
             Crew = mission.Astronauts.Select(a => new AstronautDto
             {
                 EmployeeId = a.EmployeeId,
@@ -115,12 +124,12 @@ public class MissionsController : ControllerBase
             PlannedDuration = m.PlannedDuration,
             Status = m.Status,
             Type = m.Type,
-            
+
             ManagerName = m.Manager != null ? m.Manager.Name : "No Manager",
             RocketModel = m.Rocket != null ? m.Rocket.ModelName : "No Rocket",
             LaunchPadLocation = m.LaunchPad.Location ?? "No Launchpad",
             TargetBodyName = m.TargetBody.Name ?? "No Target",
-            
+
         }).ToList();
 
         return Ok(missionDtos);
@@ -132,7 +141,7 @@ public class MissionsController : ControllerBase
     {
         var rocket = await _rocketRepo.GetRocketByIdAsync(dto.RocketId);
         var launchPad = await _launchPadRepo.GetLaunchPadByIdAsync(dto.LaunchPadId);
-        
+
         if (rocket == null) return BadRequest("The specified rocket does not exist.");
         if (launchPad == null) return BadRequest("The specified launchpad does not exist.");
 
@@ -174,7 +183,7 @@ public class MissionsController : ControllerBase
 
         var rocket = await _rocketRepo.GetRocketByIdAsync(dto.RocketId);
         var launchPad = await _launchPadRepo.GetLaunchPadByIdAsync(dto.LaunchPadId);
-        
+
         if (rocket != null && launchPad != null && rocket.Weight > launchPad.MaxWeight)
         {
             return BadRequest($"Rocket weight ({rocket.Weight}) exceeds the launchpad's maximum supported weight ({launchPad.MaxWeight}).");
@@ -195,7 +204,7 @@ public class MissionsController : ControllerBase
             return BadRequest(ex.Message);
         }
 
-        
+
         existing.Name = dto.Name;
         existing.PlannedLaunchDate = dto.PlannedLaunchDate;
         existing.PlannedDuration = dto.PlannedDuration;
@@ -225,9 +234,9 @@ public class MissionsController : ControllerBase
     public async Task<IActionResult> AssignAstronaut(int missionId, int astronautId)
     {
         var success = await _missionRepo.AssignAstronautAsync(missionId, astronautId);
-        
+
         if (!success) return NotFound("Either the Mission or the Astronaut was not found.");
-        
+
         return Ok(new { message = $"Astronaut {astronautId} was successfully assigned to Mission {missionId}." });
     }
 
@@ -236,9 +245,9 @@ public class MissionsController : ControllerBase
     public async Task<IActionResult> RemoveAstronaut(int missionId, int astronautId)
     {
         var success = await _missionRepo.RemoveAstronautAsync(missionId, astronautId);
-        
+
         if (!success) return NotFound("Either the Mission or the Astronaut was not found.");
-        
+
         return Ok(new { message = $"Astronaut {astronautId} was successfully removed from Mission {missionId}." });
     }
 
@@ -247,9 +256,9 @@ public class MissionsController : ControllerBase
     public async Task<IActionResult> AssignScientist(int missionId, int scientistId)
     {
         var success = await _missionRepo.AssignScientistAsync(missionId, scientistId);
-        
+
         if (!success) return NotFound("Either the Mission or the Scientist was not found.");
-        
+
         return Ok(new { message = $"Scientist {scientistId} was successfully assigned to Mission {missionId}." });
     }
 
@@ -258,9 +267,9 @@ public class MissionsController : ControllerBase
     public async Task<IActionResult> RemoveScientist(int missionId, int scientistId)
     {
         var success = await _missionRepo.RemoveScientistAsync(missionId, scientistId);
-        
+
         if (!success) return NotFound("Either the Mission or the Scientist was not found.");
-        
+
         return Ok(new { message = $"Scientist {scientistId} was successfully removed from Mission {missionId}." });
     }
 }

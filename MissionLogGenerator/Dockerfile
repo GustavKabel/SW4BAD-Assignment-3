@@ -12,5 +12,5 @@ RUN dotnet publish MissionLogGenerator.csproj -c Release -o /app
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
-COPY --from=build /app -
+COPY --from=build /app .
 ENTRYPOINT [ "dotnet", "MissionLogGenerator.dll"]

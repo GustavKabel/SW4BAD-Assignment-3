@@ -62,11 +62,13 @@ public static class SeedData
         {
             context.Rockets.AddRange(
                 new Rocket { ModelName = "Superfly", PayloadCap = 14000, CrewCap = 3, NoOfStages = 3, FuelCap = 200000, Weight = 296000.0 },
-                new Rocket { ModelName = "BC Rocket", PayloadCap = 13000, CrewCap = 2, NoOfStages = 2, FuelCap = 150000, Weight = 230000.0 }
+                new Rocket { ModelName = "BC Rocket", PayloadCap = 13000, CrewCap = 2, NoOfStages = 2, FuelCap = 150000, Weight = 230000.0 },
+                new Rocket { ModelName = "Nimbus", PayloadCap = 10000, CrewCap = 4, NoOfStages = 4, FuelCap = 250000, Weight = 300000.0 }
             );
             context.LaunchPads.AddRange(
                 new LaunchPad { Location = "Hogwartz", Status = "Active", MaxWeight = 3000000.0 },
-                new LaunchPad { Location = "The forbidden forest", Status = "Active", MaxWeight = 4000000.0 }
+                new LaunchPad { Location = "The Forbidden Forest", Status = "Active", MaxWeight = 4000000.0 },
+                new LaunchPad { Location = "The Ministry of Magic", Status = "Active", MaxWeight = 5000000.0 }
             );
             
             // For Celestial Bodies, we link the Moon to Earth via the object property!

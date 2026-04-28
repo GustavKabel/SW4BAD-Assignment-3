@@ -20,13 +20,10 @@ public class SpaceProgramContext : IdentityDbContext<AppUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // REQUIRED: This must be called first when using IdentityDbContext
         base.OnModelCreating(modelBuilder);
 
         // Ensure Inheritance of Employee entities
         modelBuilder.Entity<Employee>().UseTptMappingStrategy();
-
-        // FLUENT API RELATIONSHIPS
 
         // Many-to-Many: Mission <-> Astronauts
         modelBuilder.Entity<Mission>()
@@ -54,8 +51,6 @@ public class SpaceProgramContext : IdentityDbContext<AppUser>
             .WithOne(r => r.Mission)
             .HasForeignKey<Mission>(m => m.RocketId);
 
-
-        // EXTRA DATABASE CONSTRAINTS
 
         // Ensure rocket weight cannot be negative
         modelBuilder.Entity<Rocket>()

@@ -16,15 +16,13 @@ public class Worker : BackgroundService
         _logger = logger;
         _httpClientFactory = httpClientFactory;
         
-        // Connect to the specific database and collection
         var database = mongoClient.GetDatabase("AarhusSpaceLogs");
         _logsCollection = database.GetCollection<MissionLog>("MissionLogs");
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        // The assignment requires running every 10-30 seconds
-        using PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromSeconds(15));
+        using PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromSeconds(30));
 
         while (!stoppingToken.IsCancellationRequested && await timer.WaitForNextTickAsync(stoppingToken))
         {
@@ -39,7 +37,6 @@ public class Worker : BackgroundService
         {
             var client = _httpClientFactory.CreateClient("WebAPI");
             
-            // 1. Fetch Active Missions via HTTP from your API
             var response = await client.GetAsync("/api/Missions?status=Active", stoppingToken);
             
             if (response.IsSuccessStatusCode)
@@ -50,7 +47,6 @@ public class Worker : BackgroundService
                 {
                     var logsToInsert = new List<MissionLog>();
 
-                    // 2. Generate Dummy Logs
                     foreach (var mission in activeMissions)
                     {
                         logsToInsert.Add(new MissionLog
@@ -61,7 +57,6 @@ public class Worker : BackgroundService
                         });
                     }
 
-                    // 3. Save to MongoDB
                     if (logsToInsert.Any())
                     {
                         await _logsCollection.InsertManyAsync(logsToInsert, cancellationToken: stoppingToken);

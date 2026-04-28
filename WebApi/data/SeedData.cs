@@ -12,7 +12,7 @@ public static class SeedData
         var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        // 1. SEED ROLES
+        // Seed roles
         string[] roles = { "Manager", "Scientist", "Astronaut" };
         foreach (var role in roles)
         {
@@ -34,10 +34,9 @@ public static class SeedData
             return user.Id;
         }
 
-        // 2. SEED EMPLOYEES & LINK TO IDENTITY
+        // seed employees and link to identity
         if (!context.Employees.Any())
         {
-            // Note: No more EmployeeId! We let SQL Server auto-generate them.
             context.Managers.AddRange(
                 new Manager { Name = "Dumbledore", HireDate = new DateOnly(2001, 1, 1), Department = "Flight control", AppUserId = await CreateUserAsync("Dumbledore", "Manager") },
                 new Manager { Name = "Voldemord", HireDate = new DateOnly(2002, 1, 1), Department = "Engineering", AppUserId = await CreateUserAsync("Voldemord", "Manager") }
@@ -57,7 +56,7 @@ public static class SeedData
             await context.SaveChangesAsync();
         }
 
-        // 3. SEED BASE DATA (Rockets, Pads, Bodies)
+        // seed base data
         if (!context.Rockets.Any())
         {
             context.Rockets.AddRange(
@@ -71,7 +70,6 @@ public static class SeedData
                 new LaunchPad { Location = "The Ministry of Magic", Status = "Active", MaxWeight = 5000000.0 }
             );
             
-            // For Celestial Bodies, we link the Moon to Earth via the object property!
             var earth = new CelestialBody { Name = "Earth", Distance = 0, BodyType = CelestialBodyType.Planet, Subtype = CelestialBodySubType.RockyPlanet, ParentBodyId = null };
             var moon = new CelestialBody { Name = "Moon", Distance = 384400, BodyType = CelestialBodyType.Moon, Subtype = CelestialBodySubType.None, ParentBody = earth };
             var mars = new CelestialBody { Name = "Mars", Distance = 225000000, BodyType = CelestialBodyType.Planet, Subtype = CelestialBodySubType.RockyPlanet, ParentBodyId = null };
@@ -80,10 +78,9 @@ public static class SeedData
             await context.SaveChangesAsync();
         }
 
-        // 4. SEED MISSIONS & MANY-TO-MANY RELATIONSHIPS
+        // seed missions and many-to-many relations
         if (!context.Missions.Any())
         {
-            // Instead of guessing IDs, we fetch exactly who we need by name!
             var ron = await context.Astronauts.FirstOrDefaultAsync(a => a.Name == "Ron Weasley");
             var neville = await context.Astronauts.FirstOrDefaultAsync(a => a.Name == "Neville Longbottom");
             var draco = await context.Astronauts.FirstOrDefaultAsync(a => a.Name == "Draco Malfoy");
@@ -122,14 +119,14 @@ public static class SeedData
             context.Missions.AddRange(apollo11, artemis);
             await context.SaveChangesAsync();
             
-            // 5. SEED AN EXPERIMENT
+            // seed experiment
             if (!context.Experiments.Any())
             {
                 context.Experiments.Add(new Experiment
                 {
                     Name = "Magic Plant Growth", Description = "Testing mandrakes in microgravity.",
-                    Mission = apollo11, // Link to the object, not the ID!
-                    Scientist = hermione // Link to the object, not the ID!
+                    Mission = apollo11, 
+                    Scientist = hermione
                 });
                 await context.SaveChangesAsync();
             }

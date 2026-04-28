@@ -12,8 +12,8 @@ using Microsoft.OpenApi;
 using System.Security.Claims;
 using MongoDB.Driver;
 
-
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
@@ -63,7 +63,7 @@ builder.Services.AddScoped<ILaunchPadRepository, LaunchPadRepository>();
 builder.Services.AddScoped<IExperimentRepository, ExperimentRepository>();
 builder.Services.AddScoped<IMissionLogRepository, MissionLogRepository>();
 
-//Add MissionLogging 
+// Add MissionLogging 
 builder.Services.AddSingleton<IMongoClient>(_ =>
     new MongoClient(builder.Configuration.GetConnectionString("MongoDb")));
 
@@ -71,7 +71,7 @@ builder.Services.AddSingleton<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoClient>().GetDatabase("AarhusSpaceLogs"));
 
 
-//Add requirements to the password
+// Add requirements to the password
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -82,7 +82,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<SpaceProgramContext>();
 
-//Add authentication service
+// Add authentication service
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme =
@@ -105,6 +105,8 @@ builder.Services.AddAuthentication(options =>
     builder.Configuration["JWT:SigningKey"]))
     };
 });
+
+// add policies for authorization
 
 builder.Services.AddAuthorization(options =>
 {

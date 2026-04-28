@@ -34,7 +34,6 @@ public class AccountController : ControllerBase
         _signInManager = signInManager;
     }
 
-    //TODO: maybe insert the correct HTTP request for register
     [AllowAnonymous]
     [HttpPost("Register")]
     public async Task<ActionResult> Register(RegisterDTO input)
@@ -77,7 +76,6 @@ public class AccountController : ControllerBase
         }
     }
 
-    //TODO: maybe insert the correct HTTP request for login
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult> Login(LoginDTO input)

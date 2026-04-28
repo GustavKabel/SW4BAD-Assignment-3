@@ -36,7 +36,6 @@ public class MissionsController : ControllerBase
 
         if (!string.IsNullOrEmpty(status))
         {
-            // This converts the string "Active" into the MissionStatus enum
             if (Enum.TryParse<MissionStatus>(status, true, out var parsedStatus))
             {
                 missions = missions.Where(m => m.Status == parsedStatus).ToList();

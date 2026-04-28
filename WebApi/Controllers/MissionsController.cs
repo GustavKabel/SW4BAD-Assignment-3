@@ -14,15 +14,18 @@ public class MissionsController : ControllerBase
     private readonly IMissionRepository _missionRepo;
     private readonly IRocketRepository _rocketRepo;
     private readonly ILaunchPadRepository _launchPadRepo;
+    private readonly IMissionLogRepository _missionLogRepo;
 
     public MissionsController(
         IMissionRepository missionRepo,
         IRocketRepository rocketRepo,
-        ILaunchPadRepository launchPadRepo)
+        ILaunchPadRepository launchPadRepo,
+        IMissionLogRepository missionLogRepo)
     {
         _missionRepo = missionRepo;
         _rocketRepo = rocketRepo;
         _launchPadRepo = launchPadRepo;
+        _missionLogRepo = missionLogRepo;
     }
 
     [AllowAnonymous]
@@ -133,6 +136,27 @@ public class MissionsController : ControllerBase
         }).ToList();
 
         return Ok(missionDtos);
+    }
+
+    [Authorize(Policy = "ReadOnly")]
+    [HttpGet("{id}/logs")]
+    public async Task<ActionResult<IEnumerable<MissionLogDto>>> GetMissionLogs(int id)
+    {
+        var mission = await _missionRepo.GetMissionByIdAsync(id);
+        if (mission == null)
+            return NotFound($"Mission with ID {id} was not found.");
+
+        var logs = await _missionLogRepo.GetLogsByMissionIdAsync(id);
+
+        var logDtos = logs.Select(l => new MissionLogDto
+        {
+            Id = l.Id,
+            MissionId = l.MissionId,
+            Message = l.Message,
+            Timestamp = l.Timestamp
+        });
+
+        return Ok(logDtos);
     }
 
     [Authorize(Policy = "ManagerFullAccess")]
